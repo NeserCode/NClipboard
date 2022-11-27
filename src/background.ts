@@ -1,6 +1,6 @@
 "use strict"
 
-import { app, protocol, BrowserWindow } from "electron"
+import { app, protocol, BrowserWindow, globalShortcut } from "electron"
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib"
 const isDevelopment = process.env.NODE_ENV !== "production"
 
@@ -22,6 +22,7 @@ async function createWindow() {
 			nodeIntegration: process.env
 				.ELECTRON_NODE_INTEGRATION as unknown as boolean,
 			contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+			enableRemoteModule: true,
 		},
 	})
 
@@ -34,6 +35,13 @@ async function createWindow() {
 		// Load the index.html when not in development
 		win.loadURL("app://./index.html")
 	}
+
+	globalShortcut.register("CommandOrControl+Q", () => {
+		win.reload()
+	})
+	globalShortcut.register("CommandOrControl+E", () => {
+		win.webContents.openDevTools()
+	})
 }
 
 // Quit when all windows are closed.

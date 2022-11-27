@@ -1,0 +1,50 @@
+import { remote } from "electron"
+import type {
+	BrowserWindowConstructorOptions,
+	BrowserWindow as BrowserWindowType,
+} from "electron"
+
+// import { defaultWindowOptions } from "../share/defaultWindowOptions"
+
+const { BrowserWindow } = remote
+const isDevelopment = process.env.NODE_ENV !== "production"
+
+export class WindowCreator {
+	private mainWindow: BrowserWindowType | null = null
+
+	constructor(opt: BrowserWindowConstructorOptions, url: string) {
+		this.createMainWindow(opt, url)
+	}
+
+	public async createMainWindow(
+		opt: BrowserWindowConstructorOptions,
+		url: string
+	): Promise<void> {
+		this.mainWindow = new BrowserWindow(opt)
+		if (isDevelopment)
+			await this.mainWindow.loadURL(
+				url ? `http://localhost:8080${url}` : `http://localhost:8080`
+			)
+		else
+			await this.mainWindow.loadURL(
+				url ? `app://./index.html${url}` : `app://./index.html`
+			)
+		this.mainWindow.webContents.openDevTools()
+
+		this.mainWindow.on("closed", () => {
+			this.mainWindow = null
+		})
+	}
+
+	getWindow(): BrowserWindowType | null {
+		return this.mainWindow
+	}
+
+	openWindow(): void {
+		this.mainWindow?.show()
+	}
+
+	closeWindow(): void {
+		this.mainWindow?.close()
+	}
+}

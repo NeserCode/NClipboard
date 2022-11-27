@@ -9,11 +9,11 @@
 <style lang="postcss" scoped>
 .custom-transition-enter-active,
 .custom-transition-leave-active {
-	transition: opacity 0.5s ease;
+	@apply transition-all duration-300;
 }
 
 .custom-transition-enter-from,
 .custom-transition-leave-to {
-	opacity: 0;
+	@apply translate-y-4 opacity-0;
 }
 </style>
