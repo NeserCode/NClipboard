@@ -4,6 +4,12 @@ import { app, protocol, BrowserWindow, globalShortcut } from "electron"
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib"
 const isDevelopment = process.env.NODE_ENV !== "production"
 
+// Config Monitor
+import { ConfigMonitor } from "@/main/ConfigMinitor"
+const configMonitor = new ConfigMonitor()
+
+const { width, height } = configMonitor.getLocalConfig()
+
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
 	{ scheme: "app", privileges: { secure: true, standard: true } },
@@ -12,6 +18,8 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
 	// Create the browser window.
 	const win = new BrowserWindow({
+		width,
+		height,
 		useContentSize: true,
 		frame: false,
 		webPreferences: {
