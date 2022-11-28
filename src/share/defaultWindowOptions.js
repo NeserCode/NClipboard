@@ -1,6 +1,4 @@
 export const defaultWindowOptions = {
-  width: 800,
-  height: 600,
   resizable: true,
   frame: false,
   show: false,
@@ -8,6 +6,5 @@ export const defaultWindowOptions = {
     nodeIntegration: true,
     contextIsolation: false,
     enableRemoteModule: true,
-    webSecurity: false,
   }
 }

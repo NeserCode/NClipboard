@@ -1,18 +1,32 @@
-<template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
-</template>
+<script lang="ts" setup>
+import WindowCreator from "@/test/WindowCreator.vue"
+import { WindowCreator as WindowCreatorClass } from "@/main/windowCreator"
+import CustomTransition from "@/components/CustomTransition.vue"
+import { ref, computed } from "vue"
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+const otherWindow = ref<WindowCreatorClass | null>(null)
+const isOpening = computed(() => otherWindow.value !== null)
+const cfg = {
+	frame: true,
+	model: true,
+}
 
-@Options({
-  components: {
-    HelloWorld,
-  },
-})
-export default class HomeView extends Vue {}
+function toggleWindowCreator() {
+	if (!isOpening.value) {
+		otherWindow.value = new WindowCreatorClass(cfg, "/#/about")
+		otherWindow.value.openWindow()
+	} else {
+		otherWindow.value?.closeWindow()
+		otherWindow.value = null
+	}
+}
 </script>
+
+<template>
+	<div class="home">
+		<window-creator
+			name="open /about in a new window"
+			@toggle="toggleWindowCreator"
+		/>
+	</div>
+</template>
