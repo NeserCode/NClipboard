@@ -1,15 +1,11 @@
 <script lang="ts" setup>
 import WindowCreator from "@/test/WindowCreator.vue"
-import { WindowCreator as WindowCreatorClass } from "@/main/windowCreator"
-import CustomTransition from "@/components/CustomTransition.vue"
+import { WindowCreator as WindowCreatorClass } from "@/core/windowCreator"
 import { ref, computed } from "vue"
 
 const otherWindow = ref<WindowCreatorClass | null>(null)
 const isOpening = computed(() => otherWindow.value !== null)
-const cfg = {
-	frame: true,
-	model: true,
-}
+const cfg = {}
 
 function toggleWindowCreator() {
 	if (!isOpening.value) {
@@ -24,9 +20,6 @@ function toggleWindowCreator() {
 
 <template>
 	<div class="home">
-		<window-creator
-			name="open /about in a new window"
-			@toggle="toggleWindowCreator"
-		/>
+		<window-creator name="⚙" @toggle="toggleWindowCreator" />
 	</div>
 </template>

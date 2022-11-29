@@ -36,7 +36,10 @@ export class WindowCreator {
 				url ? `app://./index.html${url}` : `app://./index.html`
 			)
 		this.mainWindow.webContents.openDevTools()
-		console.log(assignOptions(defaultWindowOptions, opt))
+		console.log(
+			"Creator created a window",
+			assignOptions(defaultWindowOptions, opt)
+		)
 
 		this.mainWindow.on("closed", () => {
 			this.mainWindow = null

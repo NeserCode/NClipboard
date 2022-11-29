@@ -5,7 +5,7 @@ import { createProtocol } from "vue-cli-plugin-electron-builder/lib"
 const isDevelopment = process.env.NODE_ENV !== "production"
 
 // Config Monitor
-import { ConfigMonitor } from "@/main/ConfigMinitor"
+import { ConfigMonitor } from "@/core/ConfigMonitor"
 const configMonitor = new ConfigMonitor()
 
 const { width, height } = configMonitor.getLocalConfig()
@@ -20,7 +20,6 @@ async function createWindow() {
 	const win = new BrowserWindow({
 		width,
 		height,
-		useContentSize: true,
 		frame: false,
 		webPreferences: {
 			// Use pluginOptions.nodeIntegration, leave this alone
