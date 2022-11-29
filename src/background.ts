@@ -20,6 +20,7 @@ async function createWindow() {
 	const win = new BrowserWindow({
 		width,
 		height,
+		transparent: true,
 		frame: false,
 		webPreferences: {
 			// Use pluginOptions.nodeIntegration, leave this alone
@@ -48,6 +49,10 @@ async function createWindow() {
 	})
 	globalShortcut.register("CommandOrControl+E", () => {
 		win.webContents.openDevTools()
+	})
+
+	win.on("ready-to-show", () => {
+		win.webContents.send("MAIN_WINDOW_ID", win.id)
 	})
 }
 

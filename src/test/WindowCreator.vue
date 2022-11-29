@@ -23,6 +23,6 @@ function emit(): void {
 	@apply flex flex-col justify-center items-center
   px-4 py-1.5 border-2 rounded m-2 shadow
   bg-gray-100 hover:bg-gray-200 hover:border-gray-300
-  transition-all;
+  transition-all select-none;
 }
 </style>

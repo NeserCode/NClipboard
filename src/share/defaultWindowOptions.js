@@ -1,10 +1,7 @@
-import { ConfigMonitor } from "@/core/ConfigMonitor"
-const configMonitor = new ConfigMonitor()
-
-const { width, height } = configMonitor.getRemoteLocalConfig()
+import { defaultLocalConfig } from './defaultLocalConfig'
 
 export const defaultWindowOptions = {
-  width, height,
+  ...defaultLocalConfig,
   resizable: true,
   frame: false,
   show: false,
