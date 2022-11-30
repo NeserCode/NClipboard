@@ -9,10 +9,12 @@ export class WindowController {
 
 	public listeningWindowPosition() {
 		this.mainWindow?.on("move", () => {
-			console.log("Window moved", {
+			const newPosition = {
 				x: this.mainWindow?.getPosition()[0],
 				y: this.mainWindow?.getPosition()[1],
-			})
+			}
+			localStorage.setItem("position_x", newPosition.x?.toString() ?? "0")
+			localStorage.setItem("position_y", newPosition.y?.toString() ?? "0")
 		})
 	}
 }

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { debounce } from "ts-debounce"
 import WindowCreator from "@/test/WindowCreator.vue"
 import { WindowCreator as WindowCreatorClass } from "@/core/windowCreator"
 import { getWindowPosition } from "@/utils/getWindowPosition"
@@ -17,7 +18,7 @@ ipcRenderer.on("MAIN_WINDOW_ID", (event, windowId) => {
 		modal: true,
 	}
 
-	let winPosListener = new WindowController(
+	let winController = new WindowController(
 		remote.BrowserWindow.fromId(windowId)
 	).listeningWindowPosition()
 })
