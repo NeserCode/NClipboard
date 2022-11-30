@@ -5,6 +5,7 @@ import { getWindowPosition } from "@/utils/getWindowPosition"
 import { ref, computed } from "vue"
 
 import { ipcRenderer, remote } from "@/utils"
+import { WindowController } from "@/core/WindowController"
 
 let cfg: Record<never, never>
 
@@ -13,8 +14,12 @@ ipcRenderer.on("MAIN_WINDOW_ID", (event, windowId) => {
 		x: getWindowPosition().x + 50,
 		y: getWindowPosition().y + 50,
 		parent: remote.BrowserWindow.fromId(windowId),
-		model: true,
+		modal: true,
 	}
+
+	let winPosListener = new WindowController(
+		remote.BrowserWindow.fromId(windowId)
+	).listeningWindowPosition()
 })
 
 const otherWindow = ref<WindowCreatorClass | null>(null)
@@ -33,7 +38,7 @@ function toggleWindowCreator() {
 
 <template>
 	<div class="home">
-		<window-creator name="⚙" @toggle="toggleWindowCreator" />
+		<window-creator name="Setting" @toggle="toggleWindowCreator" />
 	</div>
 </template>
 

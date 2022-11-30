@@ -2,7 +2,7 @@ import type { defaultConfig } from "@/share"
 import { defaultLocalConfig } from "@/share"
 
 // Electron modules
-import { app, remote } from "electron"
+import { app } from "electron"
 
 // Node modules
 import fs from "fs"
@@ -17,20 +17,6 @@ export class ConfigMonitor {
 		try {
 			config = JSON.parse(
 				fs.readFileSync(app.getPath("userData") + "/config.json", "utf8")
-			)
-		} catch (error) {
-			config = null
-			console.warn(error, "Config file not found")
-		}
-		return config
-	}
-
-	public getRemoteLocalConfig(): defaultConfig {
-		const { app: remoteApp } = remote
-		let config
-		try {
-			config = JSON.parse(
-				fs.readFileSync(remoteApp.getPath("userData") + "/config.json", "utf8")
 			)
 		} catch (error) {
 			config = null

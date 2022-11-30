@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import CustomTransition from "@/components/CustomTransition.vue"
-import { ref, computed, onActivated, onDeactivated } from "vue"
+import { ref, computed, onMounted, onUnmounted } from "vue"
 import { useRoute } from "vue-router"
 
 function resizeCallback() {
@@ -9,13 +9,13 @@ function resizeCallback() {
 
 const applicationResizer = ref(new ResizeObserver(resizeCallback))
 
-onActivated(() => {
+onMounted(() => {
 	applicationResizer.value.observe(
 		document.querySelector(".application") ?? document.body
 	)
 })
 
-onDeactivated(() => {
+onUnmounted(() => {
 	applicationResizer.value.disconnect()
 })
 
@@ -36,7 +36,7 @@ const shouldShowMover = computed(() => $route.path === "/")
 
 <style lang="postcss" scoped>
 .application {
-	@apply inline-flex items-center w-full h-full border rounded overflow-y-hidden;
+	@apply inline-flex items-center w-full h-full rounded overflow-y-hidden;
 }
 .views {
 	@apply inline-flex items-center w-full h-full;
