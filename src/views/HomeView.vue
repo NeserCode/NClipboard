@@ -2,6 +2,7 @@
 import type { BrowserWindowConstructorOptions } from "electron"
 import WindowCreator from "@/test/WindowCreator.vue"
 import { WindowCreator as WindowCreatorClass } from "@/core/windowCreator"
+import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
 import { getWindowPosition } from "@/utils/getWindowPosition"
 import { ref, computed } from "vue"
 
@@ -32,17 +33,27 @@ function toggleWindowCreator() {
 		otherWindow.value = null
 	}
 }
+
+const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
+	new ConfigRemoteMonitor()
+)
 </script>
 
 <template>
 	<div class="home">
+		<span class="username">{{ configRemoteMonitor?.getUsername() }}</span>
 		<window-creator name="Setting" @toggle="toggleWindowCreator" />
 	</div>
 </template>
 
 <style lang="postcss" scoped>
 .home {
-	@apply inline-flex items-center w-full h-full
+	@apply inline-flex items-center w-full h-full px-4
 	bg-slate-200;
+}
+
+.username {
+	@apply font-semibold text-lg text-slate-400 dark:text-blue-400
+	transition-colors duration-300;
 }
 </style>

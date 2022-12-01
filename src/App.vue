@@ -24,6 +24,17 @@ function updateMoverClass() {
 	return null
 }
 
+function toggleDarkmode() {
+	// configRemoteMonitor.value?.toggleDarkmode()
+	if (document.querySelector("html")?.classList.contains("dark")) {
+		document.querySelector("html")?.classList.remove("dark")
+		return false
+	} else {
+		document.querySelector("html")?.classList.add("dark")
+		return true
+	}
+}
+
 // Listeners
 windowController.value?.listeningMovedPosition(() => {
 	configRemoteMonitor.value?.setPositionfromLocalStore()
@@ -31,6 +42,9 @@ windowController.value?.listeningMovedPosition(() => {
 windowController.value?.listeningToggleMovement(() => {
 	configRemoteMonitor.value?.toggleEnableMovement()
 	enabledMoverClass.value = updateMoverClass()
+})
+windowController.value?.listeningToggleDarkmode(() => {
+	configRemoteMonitor.value?.toggleDarkmode(toggleDarkmode())
 })
 </script>
 

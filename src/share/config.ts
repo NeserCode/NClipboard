@@ -4,7 +4,7 @@ export interface defaultConfig {
 	x: number
 	y: number
 	enableMovement: boolean
-	darkMode: boolean
+	darkmode: boolean
 	zindex: "desktop" | "normal" | "top"
 	opacity: number
 }

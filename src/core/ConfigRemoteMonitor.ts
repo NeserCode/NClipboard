@@ -63,6 +63,16 @@ export class ConfigRemoteMonitor {
 		}
 	}
 
+	public toggleDarkmode(enable: boolean) {
+		let darkmode = this.CONFIG?.darkmode
+		if (darkmode === undefined && enable !== undefined) darkmode = enable
+		if (this.CONFIG) {
+			localStorage.setItem("dark-mode", JSON.stringify(!darkmode))
+			this.CONFIG.darkmode = !darkmode
+			this.saveConfig()
+		}
+	}
+
 	public getUsername() {
 		return this.USERNAME
 	}
