@@ -1,24 +1,36 @@
 <script lang="ts" setup>
 import CustomTransition from "@/components/CustomTransition.vue"
-import { ref, computed, onMounted } from "vue"
+import { ref, computed } from "vue"
 import { useRoute } from "vue-router"
 import { WindowController } from "@/core/WindowController"
 import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
 // import { remote, ipcRenderer } from "@/utils"
 
+const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
+	new ConfigRemoteMonitor()
+)
+const windowController = ref<WindowController | null>(new WindowController())
+
 const $route = useRoute()
 const shouldShowMover = computed(() => $route.path === "/")
+const enabledMoverClass = ref<string | null>(updateMoverClass())
 
-const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(null)
-const windowController = ref<WindowController | null>(null)
+function updateMoverClass() {
+	if (shouldShowMover.value) {
+		return configRemoteMonitor.value?.getLocalConfig().enableMovement
+			? "enabled"
+			: null
+	}
+	return null
+}
 
-onMounted(() => {
-	configRemoteMonitor.value = new ConfigRemoteMonitor()
-	windowController.value = new WindowController()
-	windowController.value?.listeningMovedPosition(() => {
-		configRemoteMonitor.value?.setPositionfromLocalStore()
-	})
-	console.log(configRemoteMonitor.value.getLocalConfig())
+// Listeners
+windowController.value?.listeningMovedPosition(() => {
+	configRemoteMonitor.value?.setPositionfromLocalStore()
+})
+windowController.value?.listeningToggleMovement(() => {
+	configRemoteMonitor.value?.toggleEnableMovement()
+	enabledMoverClass.value = updateMoverClass()
 })
 </script>
 
@@ -29,7 +41,7 @@ onMounted(() => {
 				<component :is="Component" />
 			</custom-transition>
 		</router-view>
-		<div class="mover" v-if="shouldShowMover"></div>
+		<div :class="['mover', enabledMoverClass]" v-if="shouldShowMover"></div>
 	</div>
 </template>
 
@@ -42,8 +54,12 @@ onMounted(() => {
 }
 
 .mover {
-	@apply w-8 h-14
-	bg-gray-300;
+	@apply w-0 h-14
+	bg-gray-300
+	transition-all;
 	-webkit-app-region: drag;
+}
+.mover.enabled {
+	@apply w-14;
 }
 </style>

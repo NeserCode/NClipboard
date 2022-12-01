@@ -13,11 +13,11 @@ export class ConfigRemoteMonitor {
 	private CONFIG_FILE_PATH: string =
 		remoteApp.getPath("userData") + "/config.json"
 	private CONFIG: defaultConfig | null = null
+	private USERNAME: string = os.userInfo().username
 
 	constructor() {
 		this.CONFIG = this.getLocalConfig()
 		this.initialLocalConfig()
-		console.log(os.userInfo(), os.release())
 	}
 
 	public getLocalConfig(): defaultConfig {
@@ -52,5 +52,18 @@ export class ConfigRemoteMonitor {
 			this.CONFIG.y = y
 			this.saveConfig()
 		} else if (!this.CONFIG) this.initialLocalConfig()
+	}
+
+	public toggleEnableMovement() {
+		let enabled = this.CONFIG?.enableMovement
+		if (enabled === undefined) enabled = true
+		if (this.CONFIG) {
+			this.CONFIG.enableMovement = !enabled
+			this.saveConfig()
+		}
+	}
+
+	public getUsername() {
+		return this.USERNAME
 	}
 }

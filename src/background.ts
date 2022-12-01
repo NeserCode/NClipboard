@@ -59,6 +59,9 @@ async function createWindow() {
 	globalShortcut.register("CommandOrControl+D", () => {
 		win.webContents.closeDevTools()
 	})
+	globalShortcut.register("CommandOrControl+M", () => {
+		win.webContents.send("toggle-movement")
+	})
 
 	win.on("ready-to-show", () => {
 		win.webContents.send("MAIN_WINDOW_ID", win.id)

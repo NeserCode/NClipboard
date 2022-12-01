@@ -10,4 +10,11 @@ export class WindowController {
 			if (callback) callback()
 		})
 	}
+
+	public listeningToggleMovement(callback?: () => void) {
+		ipcRenderer.on("toggle-movement", () => {
+			console.log("toggle movement")
+			if (callback) callback()
+		})
+	}
 }
