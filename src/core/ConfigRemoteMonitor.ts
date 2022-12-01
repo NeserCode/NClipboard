@@ -6,6 +6,7 @@ import { remote } from "electron"
 const { app: remoteApp } = remote
 
 // Node modules
+import os from "os"
 import fs from "fs"
 
 export class ConfigRemoteMonitor {
@@ -16,6 +17,7 @@ export class ConfigRemoteMonitor {
 	constructor() {
 		this.CONFIG = this.getLocalConfig()
 		this.initialLocalConfig()
+		console.log(os.userInfo(), os.release())
 	}
 
 	public getLocalConfig(): defaultConfig {
