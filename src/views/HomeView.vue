@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-import { debounce } from "ts-debounce"
 import WindowCreator from "@/test/WindowCreator.vue"
 import { WindowCreator as WindowCreatorClass } from "@/core/windowCreator"
 import { getWindowPosition } from "@/utils/getWindowPosition"
 import { ref, computed } from "vue"
 
 import { ipcRenderer, remote } from "@/utils"
-import { WindowController } from "@/core/WindowController"
 
 let cfg: Record<never, never>
 
@@ -17,10 +15,6 @@ ipcRenderer.on("MAIN_WINDOW_ID", (event, windowId) => {
 		parent: remote.BrowserWindow.fromId(windowId),
 		modal: true,
 	}
-
-	let winController = new WindowController(
-		remote.BrowserWindow.fromId(windowId)
-	).listeningWindowPosition()
 })
 
 const otherWindow = ref<WindowCreatorClass | null>(null)

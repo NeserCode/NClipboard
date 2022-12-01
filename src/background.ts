@@ -56,6 +56,14 @@ async function createWindow() {
 	win.on("ready-to-show", () => {
 		win.webContents.send("MAIN_WINDOW_ID", win.id)
 	})
+
+	win.on("moved", () => {
+		const newPosition = {
+			x: win.getPosition()[0],
+			y: win.getPosition()[1],
+		}
+		win.webContents.send("moved-position", newPosition)
+	})
 }
 
 // Quit when all windows are closed.

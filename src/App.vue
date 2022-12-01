@@ -1,26 +1,16 @@
 <script lang="ts" setup>
 import CustomTransition from "@/components/CustomTransition.vue"
-import { ref, computed, onMounted, onUnmounted } from "vue"
+import { computed } from "vue"
 import { useRoute } from "vue-router"
-
-function resizeCallback() {
-	console.log("resized")
-}
-
-const applicationResizer = ref(new ResizeObserver(resizeCallback))
-
-onMounted(() => {
-	applicationResizer.value.observe(
-		document.querySelector(".application") ?? document.body
-	)
-})
-
-onUnmounted(() => {
-	applicationResizer.value.disconnect()
-})
+import { WindowController } from "@/core/WindowController"
+import { remote, ipcRenderer } from "@/utils"
 
 const $route = useRoute()
 const shouldShowMover = computed(() => $route.path === "/")
+
+ipcRenderer.on("MAIN_WINDOW_ID", (event, windowId) => {
+	new WindowController(remote.BrowserWindow.fromId(windowId))
+})
 </script>
 
 <template>
