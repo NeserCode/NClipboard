@@ -1,15 +1,24 @@
 <script lang="ts" setup>
 import CustomTransition from "@/components/CustomTransition.vue"
-import { computed } from "vue"
+import { ref, computed, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { WindowController } from "@/core/WindowController"
-import { remote, ipcRenderer } from "@/utils"
+import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
+// import { remote, ipcRenderer } from "@/utils"
 
 const $route = useRoute()
 const shouldShowMover = computed(() => $route.path === "/")
 
-ipcRenderer.on("MAIN_WINDOW_ID", (event, windowId) => {
-	new WindowController(remote.BrowserWindow.fromId(windowId))
+const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(null)
+const windowController = ref<WindowController | null>(null)
+
+onMounted(() => {
+	configRemoteMonitor.value = new ConfigRemoteMonitor()
+	windowController.value = new WindowController()
+	windowController.value?.listeningMovedPosition(() => {
+		configRemoteMonitor.value?.setPositionfromLocalStore()
+	})
+	console.log(configRemoteMonitor.value.getLocalConfig())
 })
 </script>
 

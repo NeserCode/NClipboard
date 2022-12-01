@@ -1,4 +1,4 @@
-import { remote } from "electron"
+import { defaultLocalConfig } from "@/share"
 
 interface Position {
 	x: number
@@ -6,8 +6,9 @@ interface Position {
 }
 
 export function getWindowPosition(): Position {
-	return {
-		x: remote.getCurrentWindow().getPosition()[0],
-		y: remote.getCurrentWindow().getPosition()[1],
-	}
+	const position = localStorage.getItem("win-position")
+	if (position) {
+		const { x, y } = JSON.parse(position)
+		return { x, y }
+	} else return { x: defaultLocalConfig.x, y: defaultLocalConfig.y }
 }

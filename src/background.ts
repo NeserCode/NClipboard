@@ -8,7 +8,7 @@ const isDevelopment = process.env.NODE_ENV !== "production"
 import { ConfigMonitor } from "@/core/ConfigMonitor"
 const configMonitor = new ConfigMonitor()
 
-const { width, height } = configMonitor.getLocalConfig()
+const { width, height, x, y } = configMonitor.getLocalConfig()
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -20,6 +20,8 @@ async function createWindow() {
 	const win = new BrowserWindow({
 		width,
 		height,
+		x,
+		y,
 		resizable: false,
 		transparent: true,
 		frame: false,
@@ -50,7 +52,12 @@ async function createWindow() {
 		win.reload()
 	})
 	globalShortcut.register("CommandOrControl+E", () => {
-		win.webContents.openDevTools()
+		win.webContents.isDevToolsOpened()
+			? win.webContents.closeDevTools()
+			: win.webContents.openDevTools()
+	})
+	globalShortcut.register("CommandOrControl+D", () => {
+		win.webContents.closeDevTools()
 	})
 
 	win.on("ready-to-show", () => {

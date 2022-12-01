@@ -9,7 +9,7 @@ import fs from "fs"
 
 export class ConfigMonitor {
 	constructor() {
-		// this.initialLocalConfig()
+		this.initialLocalConfig()
 	}
 
 	public getLocalConfig(): defaultConfig {

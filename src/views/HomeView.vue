@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { BrowserWindowConstructorOptions } from "electron"
 import WindowCreator from "@/test/WindowCreator.vue"
 import { WindowCreator as WindowCreatorClass } from "@/core/windowCreator"
 import { getWindowPosition } from "@/utils/getWindowPosition"
@@ -6,13 +7,13 @@ import { ref, computed } from "vue"
 
 import { ipcRenderer, remote } from "@/utils"
 
-let cfg: Record<never, never>
+let cfg: BrowserWindowConstructorOptions
 
 ipcRenderer.on("MAIN_WINDOW_ID", (event, windowId) => {
 	cfg = {
 		x: getWindowPosition().x + 50,
 		y: getWindowPosition().y + 50,
-		parent: remote.BrowserWindow.fromId(windowId),
+		parent: remote.BrowserWindow.fromId(windowId) ?? undefined,
 		modal: true,
 	}
 })
@@ -22,6 +23,8 @@ const isOpening = computed(() => otherWindow.value !== null)
 
 function toggleWindowCreator() {
 	if (!isOpening.value) {
+		cfg.x = getWindowPosition().x + 50
+		cfg.y = getWindowPosition().y + 50
 		otherWindow.value = new WindowCreatorClass(cfg, "/#/about")
 		otherWindow.value.openWindow()
 	} else {
