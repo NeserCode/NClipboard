@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { toRefs, defineEmits, defineProps } from "vue"
+import { toRefs } from "vue"
 const $emit = defineEmits(["toggle"])
 const $props = defineProps<{
 	name: string

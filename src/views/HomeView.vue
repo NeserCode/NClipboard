@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import TimeModule from "@/components/TimeModule.vue"
 import type { BrowserWindowConstructorOptions } from "electron"
 import WindowCreator from "@/test/WindowCreator.vue"
 import { WindowCreator as WindowCreatorClass } from "@/core/windowCreator"
@@ -41,6 +42,7 @@ const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
 
 <template>
 	<div class="home">
+		<time-module />
 		<span class="username">{{ configRemoteMonitor?.getUsername() }}</span>
 		<window-creator name="Setting" @toggle="toggleWindowCreator" />
 	</div>
