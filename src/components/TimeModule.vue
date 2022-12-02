@@ -19,13 +19,29 @@ onUnmounted(() => {
 	clearInterval(timer)
 	Monitor.value = null
 })
+
+// function to add zero to the given number
+const addZero = (num: number | undefined) => {
+	if (num !== undefined) return num < 10 ? "0" + num : num
+}
 </script>
 
 <template>
 	<div id="time">
 		<span class="time-line">{{
-			`${time?.hours}:${time?.minutes}:${time?.seconds}`
+			`${addZero(time?.hours)}
+			${addZero(time?.minutes)}
+			${addZero(time?.seconds)}`
 		}}</span>
-		<span class="time-line"></span>
+		<span class="time-line">
+			{{ `${time?.year}/${addZero(time?.month)}/${addZero(time?.day)}` }}
+		</span>
 	</div>
 </template>
+
+<style lang="postcss" scoped>
+#time {
+	@apply inline-flex flex-col items-center justify-center
+	text-sm font-thin mx-2;
+}
+</style>

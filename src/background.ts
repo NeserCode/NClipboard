@@ -22,6 +22,7 @@ async function createWindow() {
 		height,
 		x,
 		y,
+		alwaysOnTop: true,
 		resizable: false,
 		transparent: true,
 		frame: false,
