@@ -48,7 +48,7 @@ const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
 
 <style lang="postcss" scoped>
 .home {
-	@apply inline-flex items-center w-full h-full px-4
+	@apply inline-flex items-center w-full h-full
 	bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600
 	transition-colors duration-300;
 }

@@ -58,7 +58,7 @@ async function createWindow() {
 			: win.webContents.openDevTools()
 	})
 	globalShortcut.register("CommandOrControl+D", () => {
-		if (win.isFocused()) win.webContents.send("toggle-dark-mode")
+		win.webContents.send("toggle-dark-mode")
 	})
 	globalShortcut.register("CommandOrControl+M", () => {
 		if (win.isFocused()) win.webContents.send("toggle-movement")
