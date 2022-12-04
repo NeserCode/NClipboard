@@ -50,7 +50,7 @@ async function createWindow() {
 	}
 
 	globalShortcut.register("CommandOrControl+Q", () => {
-		win.reload()
+		if (win.isFocused()) win.reload()
 	})
 	globalShortcut.register("CommandOrControl+E", () => {
 		win.webContents.isDevToolsOpened()
@@ -58,10 +58,10 @@ async function createWindow() {
 			: win.webContents.openDevTools()
 	})
 	globalShortcut.register("CommandOrControl+D", () => {
-		win.webContents.send("toggle-dark-mode")
+		if (win.isFocused()) win.webContents.send("toggle-dark-mode")
 	})
 	globalShortcut.register("CommandOrControl+M", () => {
-		win.webContents.send("toggle-movement")
+		if (win.isFocused()) win.webContents.send("toggle-movement")
 	})
 
 	win.on("ready-to-show", () => {

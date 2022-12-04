@@ -41,7 +41,8 @@ const addZero = (num: number | undefined) => {
 
 <style lang="postcss" scoped>
 #time {
-	@apply inline-flex flex-col items-center justify-center
-	text-sm font-thin mx-2;
+	@apply inline-flex flex-col items-center justify-center mx-2
+	text-sm font-normal text-gray-500 dark:text-gray-400
+	transition-colors duration-300;
 }
 </style>

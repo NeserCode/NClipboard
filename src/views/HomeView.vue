@@ -13,8 +13,9 @@ let cfg: BrowserWindowConstructorOptions
 
 ipcRenderer.on("MAIN_WINDOW_ID", (event, windowId) => {
 	cfg = {
-		x: getWindowPosition().x + 50,
-		y: getWindowPosition().y + 50,
+		x: getWindowPosition().x,
+		y: getWindowPosition().y - 320,
+		height: 300,
 		parent: remote.BrowserWindow.fromId(windowId) ?? undefined,
 		modal: true,
 	}
@@ -25,9 +26,7 @@ const isOpening = computed(() => otherWindow.value !== null)
 
 function toggleWindowCreator() {
 	if (!isOpening.value) {
-		cfg.x = getWindowPosition().x + 50
-		cfg.y = getWindowPosition().y + 50
-		otherWindow.value = new WindowCreatorClass(cfg, "/#/about")
+		otherWindow.value = new WindowCreatorClass(cfg, "/#/setting")
 		otherWindow.value.openWindow()
 	} else {
 		otherWindow.value?.closeWindow()
@@ -43,7 +42,6 @@ const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
 <template>
 	<div class="home">
 		<time-module />
-		<span class="username">{{ configRemoteMonitor?.getUsername() }}</span>
 		<window-creator name="Setting" @toggle="toggleWindowCreator" />
 	</div>
 </template>
@@ -51,11 +49,7 @@ const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
 <style lang="postcss" scoped>
 .home {
 	@apply inline-flex items-center w-full h-full px-4
-	bg-slate-200;
-}
-
-.username {
-	@apply font-semibold text-lg text-slate-400 dark:text-blue-400
+	bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600
 	transition-colors duration-300;
 }
 </style>

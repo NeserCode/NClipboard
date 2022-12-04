@@ -2,7 +2,7 @@ import { defaultLocalConfig } from './defaultLocalConfig'
 
 export const defaultWindowOptions = {
   ...defaultLocalConfig,
-  resizable: true,
+  resizable: false,
   frame: false,
   show: false,
   webPreferences: {
