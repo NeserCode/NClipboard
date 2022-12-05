@@ -1,7 +1,8 @@
 "use strict"
 
-import { app, protocol, BrowserWindow, globalShortcut } from "electron"
+import { app, protocol, BrowserWindow, globalShortcut, ipcMain } from "electron"
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib"
+import { debounce } from "ts-debounce"
 const isDevelopment = process.env.NODE_ENV !== "production"
 
 // Config Monitor
@@ -27,6 +28,7 @@ async function createWindow() {
 		transparent: true,
 		frame: false,
 		// skipTaskbar: true,
+		// show: false,
 		webPreferences: {
 			// Use pluginOptions.nodeIntegration, leave this alone
 			// See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -49,23 +51,36 @@ async function createWindow() {
 		win.loadURL("app://./index.html")
 	}
 
-	globalShortcut.register("CommandOrControl+Q", () => {
-		if (win.isFocused()) win.reload()
-	})
-	globalShortcut.register("CommandOrControl+E", () => {
-		win.webContents.isDevToolsOpened()
-			? win.webContents.closeDevTools()
-			: win.webContents.openDevTools()
-	})
-	globalShortcut.register("CommandOrControl+D", () => {
-		win.webContents.send("toggle-dark-mode")
-	})
-	globalShortcut.register("CommandOrControl+M", () => {
-		if (win.isFocused()) win.webContents.send("toggle-movement")
-	})
+	globalShortcut.register(
+		"CommandOrControl+Q",
+		debounce(() => {
+			if (win.isFocused()) win.reload()
+		}, 200)
+	)
+	globalShortcut.register(
+		"CommandOrControl+E",
+		debounce(() => {
+			win.webContents.isDevToolsOpened()
+				? win.webContents.closeDevTools()
+				: win.webContents.openDevTools()
+		}, 200)
+	)
+	globalShortcut.register(
+		"CommandOrControl+D",
+		debounce(() => {
+			win.webContents.send("toggle-dark-mode")
+		}, 200)
+	)
+	globalShortcut.register(
+		"CommandOrControl+M",
+		debounce(() => {
+			if (win.isFocused()) win.webContents.send("toggle-movement")
+		}, 200)
+	)
 
-	win.on("ready-to-show", () => {
-		win.webContents.send("MAIN_WINDOW_ID", win.id)
+	ipcMain.on("MAIN_WINDOW_ID_GETTER", (event) => {
+		event.sender.send("MAIN_WINDOW_ID_REPLY", win.id)
+		console.log("MAIN_WINDOW_ID_SENT", win.id)
 	})
 
 	win.on("moved", () => {

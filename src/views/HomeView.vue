@@ -11,7 +11,7 @@ import { ipcRenderer, remote } from "@/utils"
 
 let cfg: BrowserWindowConstructorOptions
 
-ipcRenderer.on("MAIN_WINDOW_ID", (event, windowId) => {
+ipcRenderer.on("MAIN_WINDOW_ID_REPLY", (event, windowId) => {
 	cfg = {
 		x: getWindowPosition().x,
 		y: getWindowPosition().y - 320,

@@ -38,7 +38,8 @@ export class WindowCreator {
 		this.mainWindow.webContents.openDevTools()
 		console.log(
 			"Creator created a window",
-			assignOptions(defaultWindowOptions, opt)
+			assignOptions(defaultWindowOptions, opt),
+			opt
 		)
 
 		this.mainWindow.on("closed", () => {

@@ -4,7 +4,7 @@ import { ref, computed } from "vue"
 import { useRoute } from "vue-router"
 import { WindowController } from "@/core/WindowController"
 import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
-// import { remote, ipcRenderer } from "@/utils"
+import { ipcRenderer } from "@/utils"
 
 const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
 	new ConfigRemoteMonitor()
@@ -46,6 +46,8 @@ windowController.value?.listeningToggleMovement(() => {
 windowController.value?.listeningToggleDarkmode(() => {
 	configRemoteMonitor.value?.toggleDarkmode(toggleDarkmode())
 })
+
+ipcRenderer.send("MAIN_WINDOW_ID_GETTER")
 </script>
 
 <template>
@@ -55,7 +57,7 @@ windowController.value?.listeningToggleDarkmode(() => {
 				<component :is="Component" />
 			</custom-transition>
 		</router-view>
-		<div :class="['mover', enabledMoverClass]" v-if="shouldShowMover"></div>
+		<div :class="['mover', enabledMoverClass]" v-if="shouldShowMover">Drag</div>
 	</div>
 </template>
 
@@ -68,9 +70,10 @@ windowController.value?.listeningToggleDarkmode(() => {
 }
 
 .mover {
-	@apply w-0 h-14
-	bg-gray-300
-	transition-all;
+	@apply inline-flex justify-center items-center w-0 h-14
+	bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-green-300
+	font-thin text-sm
+	transition-all overflow-hidden;
 	-webkit-app-region: drag;
 }
 .mover.enabled {

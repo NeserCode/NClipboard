@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import type { defaultConfig } from "@/share"
 import { defaultLocalConfig } from "@/share"
 
@@ -14,6 +16,8 @@ export class ConfigRemoteMonitor {
 		remoteApp.getPath("userData") + "/config.json"
 	private CONFIG: defaultConfig | null = null
 	private USERNAME: string = os.userInfo().username
+
+	public onConfigUpdated: (config: defaultConfig) => void = () => {}
 
 	constructor() {
 		this.CONFIG = this.getLocalConfig()
@@ -75,5 +79,11 @@ export class ConfigRemoteMonitor {
 
 	public getUsername() {
 		return this.USERNAME
+	}
+
+	public listeningConfigUpdated() {
+		fs.watch(this.CONFIG_FILE_PATH, () => {
+			this.onConfigUpdated(this.getLocalConfig())
+		})
 	}
 }
