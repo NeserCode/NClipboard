@@ -1,32 +1,28 @@
 <script lang="ts" setup>
 import TimeModule from "@/components/TimeModule.vue"
-import type { BrowserWindowConstructorOptions } from "electron"
 import WindowCreator from "@/test/WindowCreator.vue"
 import { WindowCreator as WindowCreatorClass } from "@/core/windowCreator"
 import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
 import { getWindowPosition } from "@/utils/getWindowPosition"
 import { ref, computed } from "vue"
 
-import { ipcRenderer, remote } from "@/utils"
-
-let cfg: BrowserWindowConstructorOptions
-
-ipcRenderer.on("MAIN_WINDOW_ID_REPLY", (event, windowId) => {
-	cfg = {
-		x: getWindowPosition().x,
-		y: getWindowPosition().y - 320,
-		height: 300,
-		parent: remote.BrowserWindow.fromId(windowId) ?? undefined,
-		modal: true,
-	}
-})
+import { remote } from "@/utils"
 
 const otherWindow = ref<WindowCreatorClass | null>(null)
 const isOpening = computed(() => otherWindow.value !== null)
 
 function toggleWindowCreator() {
 	if (!isOpening.value) {
-		otherWindow.value = new WindowCreatorClass(cfg, "/#/setting")
+		otherWindow.value = new WindowCreatorClass(
+			{
+				x: getWindowPosition().x,
+				y: getWindowPosition().y - 320,
+				height: 300,
+				parent: remote.getCurrentWindow(),
+				modal: true,
+			},
+			"/#/setting"
+		)
 		otherWindow.value.openWindow()
 	} else {
 		otherWindow.value?.closeWindow()

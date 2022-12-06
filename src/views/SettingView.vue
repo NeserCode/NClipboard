@@ -9,10 +9,9 @@ const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
 )
 
 if (configRemoteMonitor.value) {
-	configRemoteMonitor.value.onConfigUpdated = (config) => {
-		console.log("config-updated", config)
-	}
-	configRemoteMonitor.value.listeningConfigUpdated()
+	configRemoteMonitor.value.listeningConfigUpdated((config) => {
+		console.log(config)
+	})
 }
 </script>
 

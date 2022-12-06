@@ -17,8 +17,6 @@ export class ConfigRemoteMonitor {
 	private CONFIG: defaultConfig | null = null
 	private USERNAME: string = os.userInfo().username
 
-	public onConfigUpdated: (config: defaultConfig) => void = () => {}
-
 	constructor() {
 		this.CONFIG = this.getLocalConfig()
 		this.initialLocalConfig()
@@ -81,9 +79,14 @@ export class ConfigRemoteMonitor {
 		return this.USERNAME
 	}
 
-	public listeningConfigUpdated() {
-		fs.watch(this.CONFIG_FILE_PATH, () => {
-			this.onConfigUpdated(this.getLocalConfig())
+	public listeningConfigUpdated(
+		onConfigUpdated?: (config: defaultConfig) => void
+	) {
+		fs.watch(this.CONFIG_FILE_PATH, (event, name) => {
+			if (onConfigUpdated && event === "change")
+				onConfigUpdated(this.getLocalConfig())
+
+			console.log("config updated", event, name)
 		})
 	}
 }

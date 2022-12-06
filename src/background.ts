@@ -78,11 +78,6 @@ async function createWindow() {
 		}, 200)
 	)
 
-	ipcMain.on("MAIN_WINDOW_ID_GETTER", (event) => {
-		event.sender.send("MAIN_WINDOW_ID_REPLY", win.id)
-		console.log("MAIN_WINDOW_ID_SENT", win.id)
-	})
-
 	win.on("moved", () => {
 		const newPosition = {
 			x: win.getPosition()[0],
