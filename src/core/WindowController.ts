@@ -10,21 +10,21 @@ export class WindowController {
 	public listeningMovedPosition(callback?: () => void) {
 		ipcRenderer.on("moved-position", (event, newPosition) => {
 			localStorage.setItem("win-position", JSON.stringify(newPosition))
-			console.log("moved a new position", newPosition)
+			console.log("Reciver:moved a new position", newPosition)
 			if (callback) callback()
 		})
 	}
 
 	public listeningToggleMovement(callback?: () => void) {
 		ipcRenderer.on("toggle-movement", () => {
-			console.log("toggle movement")
+			console.log("Reciver:toggle movement")
 			if (callback) callback()
 		})
 	}
 
 	public listeningToggleDarkmode(callback?: () => void) {
 		ipcRenderer.on("toggle-dark-mode", () => {
-			console.log("toggle dark mode")
+			console.log("Reciver:toggle dark mode")
 			if (callback) callback()
 		})
 	}

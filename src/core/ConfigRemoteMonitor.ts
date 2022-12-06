@@ -10,6 +10,7 @@ const { app: remoteApp } = remote
 // Node modules
 import os from "os"
 import fs from "fs"
+import { debounce } from "ts-debounce"
 
 export class ConfigRemoteMonitor {
 	private CONFIG_FILE_PATH: string =
@@ -43,7 +44,7 @@ export class ConfigRemoteMonitor {
 
 	private saveConfig() {
 		fs.writeFileSync(this.CONFIG_FILE_PATH, JSON.stringify(this.CONFIG))
-		console.log("saved config", this.CONFIG)
+		console.info("Controller:saved config", this.CONFIG)
 	}
 
 	public setPositionfromLocalStore() {
@@ -82,11 +83,12 @@ export class ConfigRemoteMonitor {
 	public listeningConfigUpdated(
 		onConfigUpdated?: (config: defaultConfig) => void
 	) {
-		fs.watch(this.CONFIG_FILE_PATH, (event, name) => {
-			if (onConfigUpdated && event === "change")
-				onConfigUpdated(this.getLocalConfig())
-
-			console.log("config updated", event, name)
-		})
+		fs.watch(
+			this.CONFIG_FILE_PATH,
+			debounce((event, name) => {
+				if (onConfigUpdated && event === "change")
+					onConfigUpdated(this.getLocalConfig())
+			}, 200)
+		)
 	}
 }
