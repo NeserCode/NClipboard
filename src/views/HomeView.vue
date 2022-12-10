@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import TimeModule from "@/components/TimeModule.vue"
-import WindowCreator from "@/test/WindowCreator.vue"
+import PowerModule from "@/components/PowerModule.vue"
 import { WindowCreator as WindowCreatorClass } from "@/core/windowCreator"
 import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
 import { getWindowPosition } from "@/utils/getWindowPosition"
 import { ref, computed } from "vue"
 
-import { remote } from "@/utils"
+// import { remote } from "@/utils"
 
 const otherWindow = ref<WindowCreatorClass | null>(null)
 const isOpening = computed(() => otherWindow.value !== null)
@@ -20,8 +20,8 @@ function toggleWindowCreator() {
 				x: getWindowPosition().x,
 				y: getWindowPosition().y - 320,
 				height: 300,
-				parent: remote.getCurrentWindow(),
-				modal: true,
+				// parent: remote.getCurrentWindow(),
+				// modal: true,
 			},
 			"/#/setting"
 		)
@@ -48,8 +48,8 @@ configRemoteMonitor.value?.listeningConfigUpdated((config) => {
 
 <template>
 	<div :class="['home', disabledClass]">
-		<time-module />
-		<window-creator name="Setting" @toggle="toggleWindowCreator" />
+		<time-module @click="toggleWindowCreator" />
+		<power-module />
 	</div>
 </template>
 

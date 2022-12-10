@@ -28,11 +28,13 @@ const addZero = (num: number | undefined) => {
 
 <template>
 	<div id="time">
-		<span class="time-line">{{
-			`${addZero(time?.hours)}
-			${addZero(time?.minutes)}
-			${addZero(time?.seconds)}`
-		}}</span>
+		<span class="time-line">
+			<span class="hour">{{ addZero(time?.hours) }}</span>
+			<span class="spearate">:</span>
+			<span class="minute">{{ addZero(time?.minutes) }}</span>
+			<span class="spearate">:</span>
+			<span class="second">{{ addZero(time?.seconds) }}</span>
+		</span>
 		<span class="time-line">
 			{{ `${time?.year}/${addZero(time?.month)}/${addZero(time?.day)}` }}
 		</span>
@@ -41,9 +43,13 @@ const addZero = (num: number | undefined) => {
 
 <style lang="postcss" scoped>
 #time {
-	@apply inline-flex flex-col items-center justify-center py-2 px-4
-	text-sm font-normal text-gray-500 dark:text-gray-400
+	@apply inline-flex flex-col items-center justify-center py-1 m-1 px-4 rounded
+	text-sm font-normal font-mono text-gray-400
 	hover:bg-slate-200 dark:hover:bg-gray-600 hover:cursor-pointer
 	transition-colors duration-300;
+}
+
+.time-line > .spearate {
+	@apply mx-0.5 font-thin;
 }
 </style>
