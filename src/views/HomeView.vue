@@ -48,7 +48,7 @@ configRemoteMonitor.value?.listeningConfigUpdated((config) => {
 
 <template>
 	<div :class="['home', disabledClass]">
-		<time-module @click="toggleWindowCreator" />
+		<time-module />
 		<power-module />
 	</div>
 </template>

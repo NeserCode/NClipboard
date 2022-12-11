@@ -14,6 +14,9 @@ let powerMonitor = new PowerMonitor(navigator)
 const percentage = ref(powerMonitor.getPower().percentage)
 const isCharging = ref(powerMonitor.getPower().isCharging)
 const isChargingClass = computed(() => (isCharging.value ? "charging" : ""))
+const availableClass = computed(() =>
+	percentage.value !== -1 ? "available" : ""
+)
 
 $Bus.on("power-update", () => {
 	percentage.value = powerMonitor.getPower().percentage
@@ -22,7 +25,7 @@ $Bus.on("power-update", () => {
 </script>
 
 <template>
-	<div id="power">
+	<div id="power" :class="[availableClass, isChargingClass]">
 		<span :class="['power-line', isChargingClass]">
 			<span class="power-status">
 				<Battery0Icon class="power-icon" v-if="percentage <= 15" />
@@ -39,9 +42,13 @@ $Bus.on("power-update", () => {
 
 <style lang="postcss" scoped>
 #power {
-	@apply inline-flex justify-center items-center h-full py-1 px-2 my-2
+	@apply inline-flex justify-center items-center h-full py-1 my-2 w-0 overflow-hidden
 	rounded hover:bg-slate-200 font-mono dark:hover:bg-gray-600
 	transition duration-200;
+}
+
+#power.available {
+	@apply w-20;
 }
 
 .power-icon {
