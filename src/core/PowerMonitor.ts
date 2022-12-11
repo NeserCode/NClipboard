@@ -14,6 +14,7 @@ export class PowerMonitor {
 
 	private initialPower(): PowerInterface {
 		const powerState = remote.powerMonitor.getSystemIdleState(1)
+
 		return {
 			state: powerState,
 			percentage: -1,
@@ -26,7 +27,7 @@ export class PowerMonitor {
 	private updatePowerPercentage() {
 		if (this.navigator)
 			this.navigator.getBattery().then((battery) => {
-				this.POWER.percentage = battery.level * 100
+				this.POWER.percentage = Math.round(battery.level * 100)
 			})
 	}
 
@@ -38,6 +39,7 @@ export class PowerMonitor {
 	private updatePowerCharging() {
 		if (this.navigator)
 			this.navigator.getBattery().then((battery) => {
+				this.checkPowerCharging(battery.charging)
 				this.POWER.isCharging = battery.charging
 				this.POWER.chargingTime = battery.chargingTime
 				this.POWER.dischargingTime = battery.dischargingTime
@@ -49,6 +51,12 @@ export class PowerMonitor {
 		this.updatePowerState()
 		this.updatePowerCharging()
 		$Bus.emit("power-update")
+	}
+
+	private checkPowerCharging(isCharging: boolean) {
+		if (isCharging && !this.POWER.isCharging) $Bus.emit("power-charging")
+		else if (!isCharging && this.POWER.isCharging)
+			$Bus.emit("power-discharging")
 	}
 
 	public getPower(): PowerInterface {

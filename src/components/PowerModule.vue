@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import CustomTransition from "@/components/CustomTransition.vue"
-
 import { PowerMonitor } from "@/core/PowerMonitor"
 import {
 	Battery0Icon,
@@ -25,21 +23,14 @@ $Bus.on("power-update", () => {
 
 <template>
 	<div id="power">
-		<span class="power-line">
+		<span :class="['power-line', isChargingClass]">
 			<span class="power-status">
-				<custom-transition v-if="percentage <= 10"
-					><Battery0Icon class="power-icon"
-				/></custom-transition>
-				<custom-transition v-else-if="percentage <= 50"
-					><Battery50Icon class="power-icon"
-				/></custom-transition>
-				<custom-transition v-else-if="percentage <= 100">
-					<Battery100Icon class="power-icon"
-				/></custom-transition>
+				<Battery0Icon class="power-icon" v-if="percentage <= 15" />
+				<Battery50Icon class="power-icon" v-else-if="percentage <= 85" />
+				<Battery100Icon class="power-icon" v-else-if="percentage <= 100" />
 			</span>
-
 			<span class="power-percentage">{{ percentage }}%</span>
-			<span :class="['power-charging', isChargingClass]">
+			<span class="power-charging">
 				<BoltIcon class="power-icon" />
 			</span>
 		</span>
@@ -64,7 +55,7 @@ $Bus.on("power-update", () => {
 	transition-all duration-200;
 }
 
-.power-charging.charging .power-icon {
+.power-line.charging .power-charging .power-icon {
 	@apply w-3;
 }
 
@@ -73,8 +64,15 @@ $Bus.on("power-update", () => {
 }
 
 .power-percentage {
-	@apply inline-flex justify-center items-center h-full px-px
+	@apply inline-flex justify-center items-center h-full px-0.5
 	text-xs text-slate-500 dark:text-gray-400
-	select-none;
+	select-none transition-all duration-200;
+}
+
+.power-line.charging .power-percentage {
+	@apply text-green-500 dark:text-green-300;
+}
+.power-line.charging .power-icon {
+	@apply fill-green-500 dark:fill-green-300;
 }
 </style>
