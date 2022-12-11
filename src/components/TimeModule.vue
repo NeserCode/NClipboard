@@ -46,7 +46,7 @@ const addZero = (num: number | undefined) => {
 	@apply inline-flex flex-col items-center justify-center py-1 m-1 px-4 rounded
 	text-sm font-normal font-mono text-gray-400
 	hover:bg-slate-200 dark:hover:bg-gray-600 hover:cursor-pointer
-	transition-colors duration-300;
+	transition-colors duration-300 select-none;
 }
 
 .time-line > .spearate {
