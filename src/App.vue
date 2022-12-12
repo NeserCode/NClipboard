@@ -4,7 +4,8 @@ import { ref, computed } from "vue"
 import { useRoute } from "vue-router"
 import { WindowController } from "@/core/WindowController"
 import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
-import { ipcRenderer } from "@/utils"
+
+import { GenshinKit } from "@genshin-kit/core"
 
 const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
 	new ConfigRemoteMonitor()
@@ -47,7 +48,16 @@ windowController.value?.listeningToggleDarkmode(() => {
 	configRemoteMonitor.value?.toggleDarkmode(toggleDarkmode())
 })
 
-ipcRenderer.send("MAIN_WINDOW_ID_GETTER")
+const GenshinMain = new GenshinKit()
+const GenshinUid_test = 191328306
+
+GenshinMain.loginWithCookie(
+	"_MHYUUID=5a4942e3-0f54-4ed0-81f7-762073a43bcf; _MHYUUID=5a4942e3-0f54-4ed0-81f7-762073a43bcf; DEVICEFP_SEED_ID=cbfb33dfa8cdaa50; DEVICEFP_SEED_TIME=1669956998486; DEVICEFP=38d7ec53fd055; LOGIN_PLATFORM_SWITCH_STATUS={%22bll8iq97cem8%22:{%22pwd_login_tab%22:true%2C%22password_reset_entry%22:true%2C%22sms_login_tab%22:true}}"
+)
+
+GenshinMain.getUserInfo(GenshinUid_test).then((result) => {
+	console.log(result)
+})
 </script>
 
 <template>

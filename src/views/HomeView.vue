@@ -6,13 +6,6 @@ import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
 import { getWindowPosition } from "@/utils/getWindowPosition"
 import { ref, computed } from "vue"
 
-import { GenshinKit } from "@genshin-kit/core"
-
-const GenshinMain = new GenshinKit()
-const GenshinUid_test = 191328306
-
-console.log(GenshinMain.getActivities(GenshinUid_test))
-
 // import { remote } from "@/utils"
 
 const otherWindow = ref<WindowCreatorClass | null>(null)

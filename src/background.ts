@@ -3,6 +3,7 @@
 import { app, protocol, BrowserWindow, globalShortcut, ipcMain } from "electron"
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib"
 import { debounce } from "ts-debounce"
+
 const isDevelopment = process.env.NODE_ENV !== "production"
 
 // Config Monitor
