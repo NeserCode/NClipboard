@@ -1,3 +1,5 @@
+import Electron from "electron"
+
 export declare interface PowerInterface {
 	state: string
 	percentage: number
@@ -14,3 +16,7 @@ export declare interface RemoteNavigator extends Navigator {
 		level: number
 	}>
 }
+
+export declare type OnceClipboard = string | Electron.ReadBookmark
+
+export declare type StoredClipboard = OnceClipboard[]
