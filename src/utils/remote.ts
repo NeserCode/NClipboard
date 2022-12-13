@@ -1,1 +1,1 @@
-export { remote, ipcRenderer } from "electron"
+export { remote, ipcRenderer, clipboard } from "electron"
