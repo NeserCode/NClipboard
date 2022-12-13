@@ -14,7 +14,6 @@
 	"main": "background.js",
 	"dependencies": {
 		"@electron/remote": "^2.0.8",
-		"@genshin-kit/core": "^2.6.2",
 		"@headlessui/vue": "^1.7.4",
 		"@heroicons/vue": "^2.0.13",
 		"autoprefixer": "^10",
