@@ -8,9 +8,9 @@ const { app: remoteApp } = remote
 import fs from "fs"
 
 export class StoreManager {
-	private STORE: StoredClipboard = this.getStore()
 	private STORE_PATH: string =
 		remoteApp.getPath("userData") + "/stored-clipboard.json"
+	private STORE: StoredClipboard = this.getStore()
 	private STORE_MAX_LENGTH = 10
 
 	constructor(options?: { maxLength?: number }) {
@@ -29,11 +29,15 @@ export class StoreManager {
 	}
 
 	public pushToStore(clipboard: OnceClipboard) {
-		if (this.STORE.length > 0 && this.STORE[length - 1] !== clipboard) {
+		if (
+			this.STORE.length >= 0 &&
+			this.STORE[this.STORE.length - 1] !== clipboard
+		) {
 			const store = this.STORE
 			store.push(clipboard)
 			if (store.length > this.STORE_MAX_LENGTH) store.shift()
 			this.saveStore(store)
+			console.log("StoreManager:pushed to store", store)
 		}
 	}
 

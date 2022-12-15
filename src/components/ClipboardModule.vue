@@ -11,6 +11,7 @@ const storeManager = new StoreManager()
 const clipboardMonitor = new ClipboardMonitor(storeManager)
 
 onMounted(() => {
+	clipboardMonitor.start()
 	clipboard.value = clipboardMonitor.getClipboard().readContent
 	prefix.value = clipboardMonitor.getClipboard().usefulFormat[0]
 })

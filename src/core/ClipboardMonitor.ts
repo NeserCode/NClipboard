@@ -6,9 +6,13 @@ import type { OnceClipboard } from "@/share"
 export class ClipboardMonitor {
 	private CLIPBOARD = clipboard
 	private STORE_MANAGER: StoreManager | null = null
+	private INTERVAL: NodeJS.Timeout | null = null
+	private INTERVAL_TIME = 1000
 
-	constructor(sm: StoreManager) {
+	constructor(sm: StoreManager, options?: { intervalTime?: number }) {
 		this.STORE_MANAGER = sm
+		if (options && options.intervalTime)
+			this.INTERVAL_TIME = options.intervalTime
 	}
 
 	public getClipboard() {
@@ -37,5 +41,15 @@ export class ClipboardMonitor {
 		if (clipboard.readContent) {
 			this.STORE_MANAGER?.pushToStore(clipboard.readContent)
 		}
+	}
+
+	public start() {
+		this.INTERVAL = setInterval(() => {
+			this.pushToStore()
+		}, this.INTERVAL_TIME)
+	}
+
+	public stop() {
+		if (this.INTERVAL) clearInterval(this.INTERVAL)
 	}
 }
