@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import TimeModule from "@/components/TimeModule.vue"
 import PowerModule from "@/components/PowerModule.vue"
+import ClipboardModule from "@/components/ClipboardModule.vue"
 import { WindowCreator as WindowCreatorClass } from "@/core/windowCreator"
 import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
 import { getWindowPosition } from "@/utils/getWindowPosition"
@@ -50,6 +51,7 @@ configRemoteMonitor.value?.listeningConfigUpdated((config) => {
 	<div :class="['home', disabledClass]">
 		<time-module />
 		<power-module />
+		<clipboard-module @click="toggleWindowCreator" />
 	</div>
 </template>
 
