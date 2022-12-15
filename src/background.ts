@@ -24,11 +24,11 @@ async function createWindow() {
 		height,
 		x,
 		y,
-		alwaysOnTop: true,
 		resizable: false,
 		transparent: true,
 		frame: false,
-		// skipTaskbar: true,
+		alwaysOnTop: true,
+		skipTaskbar: true,
 		// show: false,
 		webPreferences: {
 			// Use pluginOptions.nodeIntegration, leave this alone
@@ -86,6 +86,10 @@ async function createWindow() {
 			y: win.getPosition()[1],
 		}
 		win.webContents.send("moved-position", newPosition)
+	})
+
+	win.once("ready-to-show", () => {
+		win.show()
 	})
 }
 

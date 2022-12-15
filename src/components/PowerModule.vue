@@ -42,7 +42,7 @@ $Bus.on("power-update", () => {
 
 <style lang="postcss" scoped>
 #power {
-	@apply inline-flex justify-center items-center h-full py-1 my-2 w-0 overflow-hidden
+	@apply inline-flex justify-center items-center py-1 my-2 w-0 overflow-hidden
 	rounded hover:bg-slate-200 font-mono dark:hover:bg-gray-600
 	transition duration-200;
 }

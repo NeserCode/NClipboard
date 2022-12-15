@@ -71,7 +71,7 @@ console.log(cm.getClipboard())
 }
 
 .mover {
-	@apply inline-flex justify-center items-center w-0 h-14
+	@apply inline-flex justify-center items-center w-0 h-[60px]
 	bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-green-300
 	font-thin text-sm
 	transition-all overflow-hidden;

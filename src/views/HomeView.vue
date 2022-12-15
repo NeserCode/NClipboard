@@ -57,7 +57,7 @@ configRemoteMonitor.value?.listeningConfigUpdated((config) => {
 
 <style lang="postcss" scoped>
 .home {
-	@apply inline-flex items-center w-full h-full
+	@apply inline-flex items-center w-full h-[60px] box-border
 	bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600
 	transition-colors duration-300;
 }
