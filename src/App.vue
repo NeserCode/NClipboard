@@ -46,9 +46,6 @@ windowController.value?.listeningToggleMovement(() => {
 windowController.value?.listeningToggleDarkmode(() => {
 	configRemoteMonitor.value?.toggleDarkmode(toggleDarkmode())
 })
-
-const cm = new ClipboardMonitor()
-console.log(cm.getClipboard())
 </script>
 
 <template>

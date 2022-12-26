@@ -1,4 +1,4 @@
-import { clipboard } from "@/utils"
+import { clipboard, $Bus } from "@/utils"
 import { StoreManager } from "@/core/StoreManager"
 
 import type { OnceClipboard } from "@/share"
@@ -46,6 +46,7 @@ export class ClipboardMonitor {
 	public start() {
 		this.INTERVAL = setInterval(() => {
 			this.pushToStore()
+			$Bus.emit("clipboard-updated", this.getClipboard())
 		}, this.INTERVAL_TIME)
 	}
 

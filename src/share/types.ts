@@ -20,3 +20,8 @@ export declare interface RemoteNavigator extends Navigator {
 export declare type OnceClipboard = string | Electron.ReadBookmark
 
 export declare type StoredClipboard = OnceClipboard[]
+
+export declare type clipboardData = {
+	readContent: OnceClipboard
+	usefulFormat: string[]
+}

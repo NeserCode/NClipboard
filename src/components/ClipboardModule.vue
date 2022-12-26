@@ -1,19 +1,28 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue"
-import type { OnceClipboard } from "@/share"
+import type { OnceClipboard, clipboardData } from "@/share"
 
 import { ClipboardMonitor } from "@/core/ClipboardMonitor"
 import { StoreManager } from "@/core/StoreManager"
 
+import { $Bus } from "@/utils"
+
 const clipboard = ref<OnceClipboard>("")
 const prefix = ref<string>("")
-const storeManager = new StoreManager()
+const maxLength = ref<number>(50)
+const storeLength = ref<number>(0)
+const storeManager = new StoreManager({ maxLength: maxLength.value })
 const clipboardMonitor = new ClipboardMonitor(storeManager)
 
 onMounted(() => {
 	clipboardMonitor.start()
-	clipboard.value = clipboardMonitor.getClipboard().readContent
-	prefix.value = clipboardMonitor.getClipboard().usefulFormat[0]
+	storeLength.value = storeManager.getStore().length
+})
+
+// @ts-expect-error Eimtter has writen function's (handler) type
+$Bus.on("clipboard-updated", (data: clipboardData) => {
+	clipboard.value = data.readContent
+	prefix.value = data.usefulFormat[0]
 })
 </script>
 
@@ -25,6 +34,7 @@ onMounted(() => {
 		<span class="main">
 			{{ clipboard }}
 		</span>
+		<span class="limit"> {{ storeLength }}/{{ maxLength }} </span>
 	</div>
 </template>
 
@@ -47,5 +57,11 @@ onMounted(() => {
 	@apply text-sm text-gray-400
   truncate
   transition-colors duration-300;
+}
+
+#clipboard .limit {
+	@apply inline-flex items-center justify-center min-w-fit p-1 rounded ml-2 uppercase
+	text-xs font-mono
+	truncate transition-colors duration-300;
 }
 </style>
