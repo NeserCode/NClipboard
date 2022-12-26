@@ -21,6 +21,7 @@ function toggleWindowCreator() {
 				x: getWindowPosition().x,
 				y: getWindowPosition().y - 320,
 				height: 300,
+				alwaysOnTop: true,
 				// parent: remote.getCurrentWindow(),
 				// modal: true,
 			},

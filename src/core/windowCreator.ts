@@ -35,7 +35,7 @@ export class WindowCreator {
 			await this.mainWindow.loadURL(
 				url ? `app://./index.html${url}` : `app://./index.html`
 			)
-		this.mainWindow.webContents.openDevTools()
+		// this.mainWindow.webContents.openDevTools()
 		console.log(
 			"Creator created a window",
 			assignOptions(defaultWindowOptions, opt),
