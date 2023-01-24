@@ -25,7 +25,8 @@ if (configRemoteMonitor.value) {
 }
 
 onBeforeMount(() => {
-	if (storeManager.value) clipboardData.value = storeManager.value.getStore()
+	if (storeManager.value)
+		clipboardData.value = storeManager.value.getStore().reverse()
 })
 </script>
 
