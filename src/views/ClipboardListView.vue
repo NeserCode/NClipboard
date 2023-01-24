@@ -40,9 +40,12 @@ function isImage(raw: string) {
 <template>
 	<div class="copy-list">
 		<template v-for="item of clipboardData" :key="item.time">
-			<span class="copy-text copy-item" v-if="!isImage(item.clipboard)">{{
-				item.clipboard
-			}}</span>
+			<span
+				class="copy-text copy-item"
+				v-if="!isImage(item.clipboard)"
+				:title="item.clipboard"
+				>{{ item.clipboard }}</span
+			>
 			<span class="copy-image copy-item" v-else>
 				<img :src="item.clipboard" alt="image from clipboard" />
 			</span>
