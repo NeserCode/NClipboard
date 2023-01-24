@@ -30,8 +30,9 @@ export class StoreManager {
 
 	public pushToStore(clipboard: OnceClipboard) {
 		if (
-			this.STORE.length >= 0 &&
-			this.STORE[this.STORE.length - 1].clipboard !== clipboard
+			(this.STORE.length >= 1 &&
+				this.STORE[this.STORE.length - 1].clipboard !== clipboard) ||
+			this.STORE.length === 0
 		) {
 			const store = this.STORE
 			store.push({
@@ -51,6 +52,7 @@ export class StoreManager {
 		} catch (error) {
 			store = null
 			console.warn(error, "Store file not found")
+			this.initialStore()
 		}
 		return store
 	}

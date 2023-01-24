@@ -27,7 +27,7 @@ export class ClipboardMonitor {
 		else if (containsString.includes("html")) rtv = this.CLIPBOARD.readHTML()
 		else if (containsString.includes("rtf")) rtv = this.CLIPBOARD.readRTF()
 		else if (containsString.includes("bookmark"))
-			rtv = this.CLIPBOARD.readBookmark()
+			rtv = JSON.stringify(this.CLIPBOARD.readBookmark())
 		else rtv = this.CLIPBOARD.readText()
 
 		return {
@@ -39,6 +39,7 @@ export class ClipboardMonitor {
 	private pushToStore() {
 		const clipboard = this.getClipboard()
 		if (clipboard.readContent) {
+			this.STORE_MANAGER?.getStore()
 			this.STORE_MANAGER?.pushToStore(clipboard.readContent)
 		}
 	}
