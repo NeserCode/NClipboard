@@ -31,23 +31,22 @@ onBeforeMount(() => {
 </script>
 
 <template>
-	<div class="setting">
-		<span class="setting-item">setting</span>
-		<span class="item" v-for="(item, index) of clipboardData" :key="index">
-			{{ item }} | {{ index }}
+	<div class="copy-list">
+		<span class="copy-item" v-for="item of clipboardData" :key="item">
+			{{ item }}
 		</span>
 	</div>
 </template>
 
 <style lang="postcss" scoped>
-.setting {
+.copy-list {
 	@apply inline-flex flex-col items-center w-full h-[300px] overflow-y-auto
   bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600
 	text-gray-700 dark:text-gray-300
 	transition-all duration-300;
 }
 
-.item {
+.copy-item {
 	@apply inline-flex items-center w-full py-4 box-border
 	truncate
 	bg-gray-100 dark:bg-gray-700

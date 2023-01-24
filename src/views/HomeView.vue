@@ -25,7 +25,7 @@ function toggleWindowCreator() {
 				// parent: remote.getCurrentWindow(),
 				// modal: true,
 			},
-			"/#/setting"
+			"/#/list"
 		)
 		otherWindow.value.openWindow()
 	} else {

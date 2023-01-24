@@ -9,7 +9,7 @@ import { $Bus } from "@/utils"
 
 const clipboard = ref<OnceClipboard>("")
 const prefix = ref<string>("")
-const maxLength = ref<number>(100000000)
+const maxLength = ref<number>(1e4)
 const storeLength = ref<number>(0)
 const storeManager = new StoreManager({ maxLength: maxLength.value })
 const clipboardMonitor = new ClipboardMonitor(storeManager)
@@ -66,8 +66,8 @@ $Bus.on("clipboard-updated", (data: clipboardData) => {
 }
 
 #clipboard .limit {
-	@apply inline-flex items-center justify-center min-w-fit max-w-xs p-1 rounded ml-2 uppercase
+	@apply inline-flex items-center justify-center min-w-fit p-1 rounded ml-2 uppercase
 	text-xs font-mono
-	truncate transition-colors duration-300;
+	transition-colors duration-300;
 }
 </style>

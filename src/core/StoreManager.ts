@@ -31,10 +31,13 @@ export class StoreManager {
 	public pushToStore(clipboard: OnceClipboard) {
 		if (
 			this.STORE.length >= 0 &&
-			this.STORE[this.STORE.length - 1] !== clipboard
+			this.STORE[this.STORE.length - 1].clipboard !== clipboard
 		) {
 			const store = this.STORE
-			store.push(clipboard)
+			store.push({
+				time: Date.now(),
+				clipboard,
+			})
 			if (store.length > this.STORE_MAX_LENGTH) store.shift()
 			this.saveStore(store)
 			console.log("StoreManager:pushed to store", store)

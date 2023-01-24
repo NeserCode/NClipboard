@@ -4,7 +4,7 @@ import { ref, computed } from "vue"
 import { useRoute } from "vue-router"
 import { WindowController } from "@/core/WindowController"
 import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
-import { ClipboardMonitor } from "@/core/ClipboardMonitor"
+// import { ClipboardMonitor } from "@/core/ClipboardMonitor"
 
 const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
 	new ConfigRemoteMonitor()
