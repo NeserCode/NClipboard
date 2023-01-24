@@ -21,8 +21,11 @@ onMounted(() => {
 
 // @ts-expect-error Eimtter has writen function's (handler) type
 $Bus.on("clipboard-updated", (data: clipboardData) => {
-	clipboard.value = data.readContent
+	clipboard.value = data.usefulFormat[0].split("/").includes("image")
+		? "Image only support in the list"
+		: data.readContent
 	prefix.value = data.usefulFormat[0]
+	storeLength.value = storeManager.getStore().length
 })
 </script>
 
@@ -49,8 +52,11 @@ $Bus.on("clipboard-updated", (data: clipboardData) => {
 
 #clipboard .prefix {
 	@apply inline-flex items-center justify-center min-w-fit p-1 rounded mr-2 uppercase
-  text-xs font-mono bg-slate-200 dark:bg-slate-800 text-gray-400
+  text-xs font-mono bg-slate-200 dark:bg-slate-800 text-gray-400 border-2 border-transparent
   truncate transition-colors duration-300;
+}
+#clipboard:hover .prefix {
+	@apply border-gray-300 dark:border-gray-500;
 }
 
 #clipboard .main {

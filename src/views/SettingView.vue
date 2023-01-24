@@ -42,6 +42,7 @@ onBeforeMount(() => {
 .setting {
 	@apply inline-flex flex-col items-center w-full h-[300px] overflow-y-auto
   bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600
+	text-gray-700 dark:text-gray-300
 	transition-all duration-300;
 }
 
