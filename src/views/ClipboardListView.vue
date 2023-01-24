@@ -29,24 +29,24 @@ onBeforeMount(() => {
 		clipboardData.value = storeManager.value.getStore().reverse()
 })
 
-function isBase64(str: string) {
-	try {
-		return btoa(atob(str)) == str
-	} catch (err) {
-		return false
-	}
-}
+function isImage(raw: string) {
+	let regx =
+		/^\s*data:([a-z]+\/[a-z0-9-+.]+(;[a-z-]+=[a-z0-9-]+)?)?(;base64)?,([a-z0-9!$&',()*+;=\-._~:@/?%\s]*?)\s*$/i
 
-function getComputedContent(raw: string) {
-	return isBase64(raw) ? "[Image]" : raw
+	return regx.test(raw)
 }
 </script>
 
 <template>
 	<div class="copy-list">
-		<span class="copy-item" v-for="item of clipboardData" :key="item.time">
-			<span class="copy-text">{{ getComputedContent(item.clipboard) }}</span>
-		</span>
+		<template v-for="item of clipboardData" :key="item.time">
+			<span class="copy-text copy-item" v-if="!isImage(item.clipboard)">{{
+				item.clipboard
+			}}</span>
+			<span class="copy-image copy-item" v-else>
+				<img :src="item.clipboard" alt="image from clipboard" />
+			</span>
+		</template>
 	</div>
 </template>
 

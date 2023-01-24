@@ -9,7 +9,7 @@ import { $Bus } from "@/utils"
 
 const clipboard = ref<OnceClipboard>("")
 const prefix = ref<string>("")
-const maxLength = ref<number>(1e4)
+const maxLength = ref<number>(1e30)
 const storeLength = ref<number>(0)
 const storeManager = new StoreManager({ maxLength: maxLength.value })
 const clipboardMonitor = new ClipboardMonitor(storeManager)
