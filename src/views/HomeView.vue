@@ -7,16 +7,18 @@ import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
 import { getWindowPosition } from "@/utils/getWindowPosition"
 import { ref, computed } from "vue"
 
+import { ipcRenderer } from "electron"
+
 // import { remote } from "@/utils"
 
-const otherWindow = ref<WindowCreatorClass | null>(null)
-const isOpening = computed(() => otherWindow.value !== null)
+const listWindow = ref<WindowCreatorClass | null>(null)
+const isOpening = computed(() => listWindow.value !== null)
 
 const disabledClass = computed(() => (isOpening.value ? "disabled" : null))
 
 function toggleWindowCreator() {
 	if (!isOpening.value) {
-		otherWindow.value = new WindowCreatorClass(
+		listWindow.value = new WindowCreatorClass(
 			{
 				x: getWindowPosition().x,
 				y: getWindowPosition().y - 320,
@@ -27,10 +29,10 @@ function toggleWindowCreator() {
 			},
 			"/#/list"
 		)
-		otherWindow.value.openWindow()
+		listWindow.value.openWindow()
 	} else {
-		otherWindow.value?.closeWindow()
-		otherWindow.value = null
+		listWindow.value?.closeWindow()
+		listWindow.value = null
 	}
 }
 
@@ -45,6 +47,18 @@ const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
 configRemoteMonitor.value?.listeningConfigUpdated((config) => {
 	console.log("config updated", config)
 	toggleDarkmode(config.darkmode)
+})
+
+// handle close window event when reload or quit
+ipcRenderer.on("close-list-window", () => {
+	console.log("close-list-window")
+
+	if (listWindow.value !== null) {
+		listWindow.value?.closeWindow()
+		listWindow.value = null
+	}
+
+	ipcRenderer.send("close-list-window-done")
 })
 </script>
 

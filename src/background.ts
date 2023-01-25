@@ -56,7 +56,12 @@ async function createWindow() {
 	globalShortcut.register(
 		"CommandOrControl+Q",
 		debounce(() => {
-			if (win.isFocused()) win.reload()
+			if (win.isFocused()) {
+				win.webContents.send("close-list-window")
+				ipcMain.once("close-list-window-done", () => {
+					win.reload()
+				})
+			}
 		}, 200)
 	)
 	globalShortcut.register(
