@@ -41,10 +41,8 @@ function toggleDarkmode(darkmode: boolean) {
 	else document.querySelector("html")?.classList.remove("dark")
 }
 
-const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
-	new ConfigRemoteMonitor()
-)
-configRemoteMonitor.value?.listeningConfigUpdated((config) => {
+const configRemoteMonitor = ref<ConfigRemoteMonitor>(new ConfigRemoteMonitor())
+configRemoteMonitor.value.listeningConfigUpdated((config) => {
 	console.log("config updated", config)
 	toggleDarkmode(config.darkmode)
 })

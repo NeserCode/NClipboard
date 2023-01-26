@@ -35,20 +35,53 @@ function isImage(raw: string) {
 
 	return regx.test(raw)
 }
+
+function translateTime(time: number) {
+	let date = new Date(time)
+
+	// how far is the time from now
+	let diff = new Date().getTime() - date.getTime()
+	let diffHours = Math.floor(diff / (1000 * 3600))
+	let diffMinutes = Math.floor(diff / (1000 * 60))
+	let diffSeconds = Math.floor(diff / 1000)
+
+	function getDiffString() {
+		if (diffHours < 1) {
+			if (diffMinutes < 1) {
+				if (diffSeconds < 1) return "just now"
+				return `${diffSeconds} seconds ago`
+			}
+			return `${diffMinutes} minutes ago`
+		}
+		return `${diffHours} hours ago`
+	}
+
+	if (date.toLocaleDateString() === new Date().toLocaleDateString())
+		return `${date.toLocaleTimeString("chinese", {
+			hour12: false,
+		})} · ${getDiffString()}`
+	return `${date.toLocaleDateString()} ${date.toLocaleTimeString("chinese", {
+		hour12: false,
+	})}`
+}
 </script>
 
 <template>
 	<div class="copy-list">
 		<template v-for="item of clipboardData" :key="item.time">
-			<span
-				class="copy-text copy-item"
-				v-if="!isImage(item.clipboard)"
-				:title="item.clipboard"
-				>{{ item.clipboard }}</span
-			>
-			<span class="copy-image copy-item" v-else>
-				<img :src="item.clipboard" alt="image from clipboard" />
-			</span>
+			<div class="copy-item">
+				<span class="copy-text" v-if="!isImage(item.clipboard)">{{
+					item.clipboard
+				}}</span>
+				<span class="copy-image" v-else>
+					<img :src="item.clipboard" alt="image from clipboard" />
+				</span>
+				<span class="details">
+					<span class="translated-time">
+						{{ translateTime(item.time) }}
+					</span>
+				</span>
+			</div>
 		</template>
 	</div>
 </template>
@@ -62,9 +95,17 @@ function isImage(raw: string) {
 }
 
 .copy-item {
-	@apply inline-flex items-center w-full max-w-full p-4 box-border border rounded-none
+	@apply inline-flex flex-col-reverse justify-center w-full max-w-full p-4 box-border border rounded-none
 	bg-gray-100 dark:bg-gray-700 border-slate-200 dark:border-gray-600
 	whitespace-pre font-mono
 	transition-colors duration-300;
+}
+
+.copy-item .details {
+	@apply inline-flex flex-col justify-center w-full max-w-full text-gray-400
+	transition-colors duration-300;
+}
+.details .translated-time {
+	@apply inline-flex items-center font-bold text-sm;
 }
 </style>
