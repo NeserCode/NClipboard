@@ -31,14 +31,16 @@ const addZero = (num: number | undefined) => {
 }
 
 // function to toggle minute mode
-const toggleMinuteMode = () => {
-	MinuteMode.value = !MinuteMode.value
-	localStorage.setItem("minute-mode", MinuteMode.value ? "minute" : "second")
+const toggleMinuteMode = (e: MouseEvent) => {
+	if (e.button === 2) {
+		MinuteMode.value = !MinuteMode.value
+		localStorage.setItem("minute-mode", MinuteMode.value ? "minute" : "second")
+	}
 }
 </script>
 
 <template>
-	<div id="time" @click="toggleMinuteMode" :class="minuteModeClass">
+	<div id="time" @mousedown="toggleMinuteMode" :class="minuteModeClass">
 		<span class="time-line">
 			<span class="hour">{{ addZero(time?.hours) }}</span>
 			<span class="spearate">:</span>
