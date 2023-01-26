@@ -64,6 +64,18 @@ function translateTime(time: number) {
 		hour12: false,
 	})}`
 }
+
+function getTranslatedSize(words: string): string {
+	let bit = new Blob([words]).size
+	let kb = bit / 1024
+	let mb = kb / 1024
+	let gb = mb / 1024
+
+	if (gb > 1) return `${gb.toFixed(2)}GB`
+	if (mb > 1) return `${mb.toFixed(2)}MB`
+	if (kb > 1) return `${kb.toFixed(2)}KB`
+	return `${bit}B`
+}
 </script>
 
 <template>
@@ -79,6 +91,10 @@ function translateTime(time: number) {
 				<span class="details">
 					<span class="translated-time">
 						{{ translateTime(item.time) }}
+					</span>
+					<span class="type">
+						{{ isImage(item.clipboard) ? "IMAGE/PNG" : "TEXT/PLAIN" }}
+						{{ getTranslatedSize(item.clipboard) }}
 					</span>
 				</span>
 			</div>
@@ -102,10 +118,15 @@ function translateTime(time: number) {
 }
 
 .copy-item .details {
-	@apply inline-flex flex-col justify-center w-full max-w-full text-gray-400
+	@apply inline-flex items-center w-full max-w-full mb-2
+	text-gray-400
 	transition-colors duration-300;
 }
 .details .translated-time {
-	@apply inline-flex items-center font-bold text-sm;
+	@apply inline-flex items-center text-sm;
+}
+.details .type {
+	@apply inline-flex items-center text-xs ml-2 px-1 rounded-sm
+	bg-gray-200 dark:bg-gray-600;
 }
 </style>
