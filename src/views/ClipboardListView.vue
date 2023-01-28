@@ -5,10 +5,8 @@ import { ref, onBeforeMount } from "vue"
 
 import { StoredClipboard } from "@/share"
 
-const configRemoteMonitor = ref<ConfigRemoteMonitor | null>(
-	new ConfigRemoteMonitor()
-)
-const storeManager = ref<StoreManager | null>(new StoreManager())
+const configRemoteMonitor = ref<ConfigRemoteMonitor>(new ConfigRemoteMonitor())
+const storeManager = ref<StoreManager>(new StoreManager())
 
 const clipboardData = ref<StoredClipboard>([])
 
@@ -25,8 +23,7 @@ if (configRemoteMonitor.value) {
 }
 
 onBeforeMount(() => {
-	if (storeManager.value)
-		clipboardData.value = storeManager.value.getStore().reverse()
+	clipboardData.value = storeManager.value.getStore().reverse()
 })
 
 function isImage(raw: string) {
@@ -76,11 +73,18 @@ function getTranslatedSize(words: string): string {
 	if (kb > 1) return `${kb.toFixed(2)}KB`
 	return `${bit}B`
 }
+
+function deleteClipboard(index: number) {
+	if (storeManager.value) {
+		storeManager.value.deleteClipboard(index)
+		clipboardData.value = storeManager.value.getStore().reverse()
+	}
+}
 </script>
 
 <template>
 	<div class="copy-list">
-		<template v-for="item of clipboardData" :key="item.time">
+		<template v-for="(item, index) of clipboardData" :key="item.time">
 			<div class="copy-item">
 				<span class="copy-text" v-if="!isImage(item.clipboard)">{{
 					item.clipboard
@@ -98,8 +102,10 @@ function getTranslatedSize(words: string): string {
 					</span>
 				</span>
 				<span class="opearations">
-					<span class="op-btn">全部复制</span>
-					<span class="op-btn">删除</span>
+					<button class="op-btn">全部复制</button>
+					<button class="op-btn danger" @click="deleteClipboard(index)">
+						删除
+					</button>
 				</span>
 			</div>
 		</template>
@@ -108,7 +114,7 @@ function getTranslatedSize(words: string): string {
 
 <style lang="postcss" scoped>
 .copy-list {
-	@apply inline-flex flex-col items-center w-full h-[300px] max-w-full overflow-x-hidden
+	@apply inline-flex flex-col items-center w-full max-w-full overflow-x-hidden
   bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600
 	text-gray-700 dark:text-gray-300 overflow-y-auto
 	transition-all duration-300;
@@ -141,8 +147,13 @@ function getTranslatedSize(words: string): string {
 }
 
 .op-btn {
-	@apply inline-flex items-center text-xs px-1.5 py-1 mr-1 rounded
-	bg-gray-200 dark:bg-gray-600
-	transition-colors duration-300;
+	@apply inline-flex items-center text-xs px-2 py-1 mr-1 rounded border border-transparent
+	bg-gray-200 dark:bg-gray-600 active:border-gray-600 active:dark:border-gray-400
+	active:bg-gray-600 dark:active:bg-gray-200 active:text-gray-200 active:dark:text-gray-600
+	transition-colors duration-150 cursor-pointer;
+}
+
+.danger {
+	@apply bg-red-500 dark:bg-red-400 text-gray-50 dark:text-gray-700;
 }
 </style>

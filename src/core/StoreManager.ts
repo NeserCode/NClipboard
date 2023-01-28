@@ -61,4 +61,10 @@ export class StoreManager {
 		const store = this.getStore()
 		return store[store.length - 1].clipboard
 	}
+
+	public deleteClipboard(reversedIndex: number) {
+		const store = this.getStore()
+		store.splice(store.length - reversedIndex - 1, 1)
+		this.saveStore(store)
+	}
 }

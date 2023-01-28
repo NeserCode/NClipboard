@@ -45,6 +45,8 @@ export class WindowCreator {
 		this.mainWindow.on("closed", () => {
 			this.mainWindow = null
 		})
+
+		this.mainWindow.webContents.openDevTools()
 	}
 
 	getWindow(): BrowserWindowType | null {
