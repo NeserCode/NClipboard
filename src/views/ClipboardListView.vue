@@ -97,6 +97,10 @@ function getTranslatedSize(words: string): string {
 						{{ getTranslatedSize(item.clipboard) }}
 					</span>
 				</span>
+				<span class="opearations">
+					<span class="op-btn">全部复制</span>
+					<span class="op-btn">删除</span>
+				</span>
 			</div>
 		</template>
 	</div>
@@ -111,14 +115,14 @@ function getTranslatedSize(words: string): string {
 }
 
 .copy-item {
-	@apply inline-flex flex-col-reverse justify-center w-full max-w-full p-4 box-border border rounded-none
+	@apply inline-flex flex-col justify-center w-full max-w-full p-4 box-border border rounded-none
 	bg-gray-100 dark:bg-gray-700 border-slate-200 dark:border-gray-600
 	whitespace-pre font-mono
 	transition-colors duration-300;
 }
 
 .copy-item .details {
-	@apply inline-flex items-center w-full max-w-full mb-2
+	@apply inline-flex items-center w-full max-w-full mt-2
 	text-gray-400
 	transition-colors duration-300;
 }
@@ -128,5 +132,17 @@ function getTranslatedSize(words: string): string {
 .details .type {
 	@apply inline-flex items-center text-xs ml-2 px-1 rounded-sm
 	bg-gray-200 dark:bg-gray-600;
+}
+
+.opearations {
+	@apply inline-flex items-center w-full max-w-full mt-2
+	text-gray-400
+	transition-colors duration-300;
+}
+
+.op-btn {
+	@apply inline-flex items-center text-xs px-1.5 py-1 mr-1 rounded
+	bg-gray-200 dark:bg-gray-600
+	transition-colors duration-300;
 }
 </style>
