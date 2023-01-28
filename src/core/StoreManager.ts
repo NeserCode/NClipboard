@@ -56,4 +56,9 @@ export class StoreManager {
 		}
 		return store
 	}
+
+	public getLastClipboard(): OnceClipboard {
+		const store = this.getStore()
+		return store[store.length - 1].clipboard
+	}
 }

@@ -47,6 +47,14 @@ export class ClipboardMonitor {
 	public start() {
 		this.INTERVAL = setInterval(() => {
 			this.pushToStore()
+			if (
+				this.getClipboard().readContent === "" ||
+				this.getClipboard().readContent === null
+			)
+				$Bus.emit(
+					"clipboard-updated-from-last",
+					this.STORE_MANAGER?.getLastClipboard()
+				)
 			$Bus.emit("clipboard-updated", this.getClipboard())
 		}, this.INTERVAL_TIME)
 	}

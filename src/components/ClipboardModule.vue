@@ -9,7 +9,7 @@ import { $Bus } from "@/utils"
 
 const clipboard = ref<OnceClipboard>("")
 const prefix = ref<string>("")
-const maxLength = ref<number>(1e30)
+const maxLength = ref<number>(1e3)
 const storeLength = ref<number>(0)
 const storeManager = new StoreManager({ maxLength: maxLength.value })
 const clipboardMonitor = new ClipboardMonitor(storeManager)
@@ -25,6 +25,12 @@ $Bus.on("clipboard-updated", (data: clipboardData) => {
 		? "Image only support in the list"
 		: data.readContent
 	prefix.value = data.usefulFormat[0]
+	storeLength.value = storeManager.getStore().length
+})
+// @ts-expect-error Eimtter has writen function's (handler) type
+$Bus.on("clipboard-updated-from-last", (data: string) => {
+	clipboard.value = data
+	prefix.value = "Lastest"
 	storeLength.value = storeManager.getStore().length
 })
 </script>
