@@ -9,6 +9,7 @@ const configRemoteMonitor = ref<ConfigRemoteMonitor>(new ConfigRemoteMonitor())
 const storeManager = ref<StoreManager>(new StoreManager())
 
 const clipboardData = ref<StoredClipboard>([])
+const hoveringImageSrc = ref<string>("")
 
 function toggleDarkmode(darkmode: boolean) {
 	if (darkmode) document.querySelector("html")?.classList.add("dark")
@@ -80,6 +81,65 @@ function deleteClipboard(index: number) {
 		clipboardData.value = storeManager.value.getStore().reverse()
 	}
 }
+
+// Magnifier
+const magnifier = ref<HTMLElement>()
+const magnifierImage = ref<HTMLImageElement>()
+
+function showMagnifier() {
+	magnifier.value?.classList.add("show")
+}
+
+function hideMagnifier() {
+	magnifier.value?.classList.remove("show")
+}
+
+function updateMagnifierPosition(e: MouseEvent) {
+	let x = e.clientX
+	let y = e.clientY
+
+	let magnifierWidth = magnifier.value?.offsetWidth || 0
+	let magnifierHeight = magnifier.value?.offsetHeight || 0
+
+	let imageWidth = magnifierImage.value?.offsetWidth || 0
+	let imageHeight = magnifierImage.value?.offsetHeight || 0
+
+	let left = x - magnifierWidth / 2
+	let top = y - magnifierHeight / 2
+
+	if (left < 0) left = 0
+	if (top < 0) top = 0
+
+	if (left + magnifierWidth > window.innerWidth)
+		left = window.innerWidth - magnifierWidth
+	if (top + magnifierHeight > window.innerHeight)
+		top = window.innerHeight - magnifierHeight
+
+	magnifier.value?.style.setProperty("left", `${left}px`)
+	magnifier.value?.style.setProperty("top", `${top}px`)
+
+	magnifierImage.value?.style.setProperty(
+		"left",
+		`${-((x - left) / magnifierWidth) * imageWidth}px`
+	)
+	magnifierImage.value?.style.setProperty(
+		"top",
+		`${-((y - top) / magnifierHeight) * imageHeight}px`
+	)
+}
+
+function handleImageHovering(src: string) {
+	hoveringImageSrc.value = src
+	showMagnifier()
+}
+
+function handleImageLeave() {
+	hideMagnifier()
+}
+
+function handleMouseMove(e: MouseEvent) {
+	updateMagnifierPosition(e)
+}
 </script>
 
 <template>
@@ -90,7 +150,13 @@ function deleteClipboard(index: number) {
 					item.clipboard
 				}}</span>
 				<span class="copy-image" v-else>
-					<img :src="item.clipboard" alt="image from clipboard" />
+					<img
+						@mouseenter="handleImageHovering(item.clipboard)"
+						@mouseleave="handleImageLeave"
+						@mousemove="handleMouseMove"
+						:src="item.clipboard"
+						alt="image from clipboard"
+					/>
 				</span>
 				<span class="details">
 					<span class="translated-time">
@@ -109,12 +175,20 @@ function deleteClipboard(index: number) {
 				</span>
 			</div>
 		</template>
+		<div class="magnifier" ref="magnifier">
+			<img
+				class="magnifier-img"
+				ref="magnifierImage"
+				:src="hoveringImageSrc"
+				alt="magnifier"
+			/>
+		</div>
 	</div>
 </template>
 
 <style lang="postcss" scoped>
 .copy-list {
-	@apply inline-flex flex-col items-center w-full max-w-full overflow-x-hidden
+	@apply relative inline-flex flex-col items-center w-full max-w-full overflow-x-hidden
   bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600
 	text-gray-700 dark:text-gray-300 overflow-y-auto
 	transition-all duration-300;
@@ -125,6 +199,11 @@ function deleteClipboard(index: number) {
 	bg-gray-100 dark:bg-gray-700 border-slate-200 dark:border-gray-600
 	whitespace-pre font-mono
 	transition-colors duration-300;
+}
+
+.copy-image img {
+	@apply cursor-move;
+	-webkit-user-drag: none;
 }
 
 .copy-item .details {
@@ -155,5 +234,17 @@ function deleteClipboard(index: number) {
 
 .danger {
 	@apply bg-red-500 dark:bg-red-400 text-gray-50 dark:text-gray-700;
+}
+
+/* Magnifier style */
+.magnifier {
+	@apply absolute w-[300px] h-[300px] hidden;
+}
+.magnifier.show {
+	@apply block;
+}
+
+.magnifier img {
+	@apply w-full h-full object-contain;
 }
 </style>

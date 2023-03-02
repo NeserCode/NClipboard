@@ -61,7 +61,7 @@ windowController.value?.listeningToggleDarkmode(() => {
 
 <style lang="postcss" scoped>
 .application {
-	@apply inline-flex items-center w-full h-full rounded overflow-y-hidden;
+	@apply inline-flex items-center w-full h-full overflow-y-hidden;
 }
 .views {
 	@apply inline-flex items-center w-full h-full;

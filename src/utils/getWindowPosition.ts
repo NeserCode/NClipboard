@@ -14,17 +14,8 @@ export function getWindowPosition(): Position {
 	} else return { x: defaultLocalConfig.x, y: defaultLocalConfig.y }
 }
 
-// get y offset: window who
-export function getcomputedScreenYOffset(
-	offset: number,
-	WindowHeight: number,
-	BodyHeight: number
-) {
-	const { y } = getWindowPosition()
-	const { height } = remote.screen.getPrimaryDisplay().workAreaSize
-	// in bottom
-	if (y + BodyHeight + offset + WindowHeight > height)
-		return y - offset - WindowHeight
-	// in top
-	else return y + BodyHeight + offset
+// get the screen size
+export function getScreenUsable() {
+	const { width, height } = remote.screen.getPrimaryDisplay().workAreaSize
+	return { width, height }
 }
