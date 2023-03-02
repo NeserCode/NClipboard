@@ -78,3 +78,9 @@ windowController.value?.listeningToggleDarkmode(() => {
 	@apply w-14;
 }
 </style>
+
+<style>
+html.dark {
+	color-scheme: dark;
+}
+</style>

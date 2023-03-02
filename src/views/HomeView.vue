@@ -4,7 +4,10 @@ import PowerModule from "@/components/PowerModule.vue"
 import ClipboardModule from "@/components/ClipboardModule.vue"
 import { WindowCreator as WindowCreatorClass } from "@/core/windowCreator"
 import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
-import { getWindowPosition } from "@/utils/getWindowPosition"
+import {
+	getWindowPosition,
+	getcomputedScreenYOffset,
+} from "@/utils/getWindowPosition"
 import { ref, computed } from "vue"
 
 import { ipcRenderer } from "electron"
@@ -21,9 +24,9 @@ function toggleWindowCreator() {
 		listWindow.value = new WindowCreatorClass(
 			{
 				x: getWindowPosition().x,
-				y: getWindowPosition().y - 320,
+				y: getcomputedScreenYOffset(20, 300, 60),
 				height: 300,
-				alwaysOnTop: true,
+				skipTaskbar: true,
 				// parent: remote.getCurrentWindow(),
 				// modal: true,
 			},

@@ -5,6 +5,7 @@ import type {
 } from "electron"
 
 import { defaultWindowOptions } from "../share/defaultWindowOptions"
+import { debounce } from "ts-debounce"
 
 const { BrowserWindow } = remote
 const isDevelopment = process.env.NODE_ENV !== "production"
@@ -46,7 +47,29 @@ export class WindowCreator {
 			this.mainWindow = null
 		})
 
-		this.mainWindow.webContents.openDevTools()
+		remote.globalShortcut.register(
+			"CommandOrControl+Space",
+			debounce(() => {
+				if (this.mainWindow) {
+					this.mainWindow.setAlwaysOnTop(true)
+					this.mainWindow.focus()
+					this.mainWindow.setAlwaysOnTop(false)
+				}
+			}, 200)
+		)
+
+		remote.globalShortcut.register(
+			"CommandOrControl+E",
+			debounce(() => {
+				if (this.mainWindow) {
+					this.mainWindow.webContents.isDevToolsOpened()
+						? this.mainWindow.webContents.closeDevTools()
+						: this.mainWindow.webContents.openDevTools()
+				}
+			}, 200)
+		)
+
+		// this.mainWindow.webContents.openDevTools()
 	}
 
 	getWindow(): BrowserWindowType | null {

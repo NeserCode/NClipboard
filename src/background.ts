@@ -27,7 +27,6 @@ async function createWindow() {
 		resizable: false,
 		transparent: true,
 		frame: false,
-		alwaysOnTop: true,
 		skipTaskbar: true,
 		// show: false,
 		webPreferences: {
@@ -53,6 +52,8 @@ async function createWindow() {
 		win.loadURL("app://./index.html")
 	}
 
+	win.removeMenu()
+
 	globalShortcut.register(
 		"CommandOrControl+Q",
 		debounce(() => {
@@ -62,6 +63,14 @@ async function createWindow() {
 					win.reload()
 				})
 			}
+		}, 200)
+	)
+	globalShortcut.register(
+		"CommandOrControl+Space",
+		debounce(() => {
+			win.setAlwaysOnTop(true)
+			win.focus()
+			win.setAlwaysOnTop(false)
 		}, 200)
 	)
 	globalShortcut.register(
@@ -95,6 +104,11 @@ async function createWindow() {
 
 	win.once("ready-to-show", () => {
 		win.show()
+	})
+
+	win.on("blur", () => {
+		win.webContents.send("blur-the-window")
+		win.setAlwaysOnTop(false)
 	})
 }
 
