@@ -5,12 +5,15 @@ import { ref, onBeforeMount } from "vue"
 // import { debounce } from "ts-debounce"
 
 import { StoredClipboard } from "@/share"
+import { ClipboardMonitor } from "@/core/ClipboardMonitor"
 
 const configRemoteMonitor = ref<ConfigRemoteMonitor>(new ConfigRemoteMonitor())
 const storeManager = ref<StoreManager>(new StoreManager())
+const clipManager = ref<ClipboardMonitor>(
+	new ClipboardMonitor(new StoreManager(), {})
+)
 
 const clipboardData = ref<StoredClipboard>([])
-const hoveringImageSrc = ref<string>("")
 
 function toggleDarkmode(darkmode: boolean) {
 	if (darkmode) document.querySelector("html")?.classList.add("dark")
@@ -83,6 +86,14 @@ function deleteClipboard(index: number) {
 	}
 }
 
+function copyClipboard(index: number) {
+	const clipboard = clipboardData.value[index].clipboard
+
+	if (clipManager.value) {
+		clipManager.value.copyToClipboard(clipboard, isImage(clipboard))
+	}
+}
+
 // Magnifier
 const magnifier = ref<HTMLElement>()
 const magnifierImage = ref<HTMLCanvasElement>()
@@ -132,17 +143,17 @@ function updateMagnifierPosition(e: MouseEvent) {
 						: targetNaturalHeight - magnifierHeight / sizeFactor
 					: 0,
 				magnifierWidth,
-				magnifierHeight * targetImageRatio,
+				magnifierHeight,
 				0,
 				0,
 				magnifierWidth * sizeFactor,
-				magnifierHeight * targetImageRatio
+				(magnifierHeight * sizeFactor) / targetImageRatio
 			)
 
 			if (magnifier.value) {
 				magnifier.value.style.left = `${targetRect.left}px`
 				magnifier.value.style.top = `${
-					target.offsetTop + targetNaturalHeight + 10
+					target.offsetTop + target.offsetHeight + 10
 				}px`
 			}
 		}
@@ -166,8 +177,7 @@ function updateMagnifierPosition(e: MouseEvent) {
 	}
 }
 
-function handleImageHovering(src: string) {
-	hoveringImageSrc.value = src
+function handleImageHovering() {
 	showMagnifier()
 }
 
@@ -189,7 +199,7 @@ function handleMouseMove(e: MouseEvent) {
 				}}</span>
 				<span class="copy-image" v-else>
 					<img
-						@mouseenter="handleImageHovering(item.clipboard)"
+						@mouseenter="handleImageHovering()"
 						@mouseleave="handleImageLeave"
 						@mousemove="handleMouseMove"
 						:src="item.clipboard"
@@ -206,7 +216,7 @@ function handleMouseMove(e: MouseEvent) {
 					</span>
 				</span>
 				<span class="opearations">
-					<button class="op-btn">全部复制</button>
+					<button class="op-btn" @click="copyClipboard(index)">复制</button>
 					<button class="op-btn danger" @click="deleteClipboard(index)">
 						删除
 					</button>

@@ -2,6 +2,7 @@ import { clipboard, $Bus } from "@/utils"
 import { StoreManager } from "@/core/StoreManager"
 
 import type { OnceClipboard } from "@/share"
+import { remote, NativeImage } from "electron"
 
 export class ClipboardMonitor {
 	private CLIPBOARD = clipboard
@@ -42,6 +43,14 @@ export class ClipboardMonitor {
 			this.STORE_MANAGER?.getStore()
 			this.STORE_MANAGER?.pushToStore(clipboard.readContent)
 		}
+	}
+
+	public copyToClipboard(clipboard: OnceClipboard, isImage = false) {
+		const newNativeImage: NativeImage =
+			remote.nativeImage.createFromDataURL(clipboard)
+		if (isImage) {
+			this.CLIPBOARD.writeImage(newNativeImage)
+		} else this.CLIPBOARD.writeText(clipboard)
 	}
 
 	public start() {
