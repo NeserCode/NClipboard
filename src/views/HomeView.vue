@@ -4,7 +4,7 @@ import PowerModule from "@/components/PowerModule.vue"
 import ClipboardModule from "@/components/ClipboardModule.vue"
 import { WindowCreator as WindowCreatorClass } from "@/core/windowCreator"
 import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
-import { getWindowPosition, getScreenUsable } from "@/utils/getWindowPosition"
+import { getScreenUsable } from "@/utils/getWindowPosition"
 import { ref, computed } from "vue"
 
 import { ipcRenderer } from "electron"

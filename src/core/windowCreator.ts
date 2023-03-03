@@ -5,7 +5,6 @@ import type {
 } from "electron"
 
 import { defaultWindowOptions } from "../share/defaultWindowOptions"
-import { debounce } from "ts-debounce"
 
 const { BrowserWindow } = remote
 const isDevelopment = process.env.NODE_ENV !== "production"
