@@ -11,6 +11,10 @@ const MinuteMode = ref(localStorage.getItem("minute-mode") === "minute")
 const minuteModeClass = computed(() =>
 	MinuteMode.value ? "minute-mode" : null
 )
+const WeekDayMode = ref(localStorage.getItem("week-day-mode") === "week-day")
+const weekdayModeClass = computed(() =>
+	WeekDayMode.value ? "weekday-mode" : null
+)
 
 onMounted(() => {
 	Monitor.value = new TimeMonitor()
@@ -31,16 +35,26 @@ const addZero = (num: number | undefined) => {
 }
 
 // function to toggle minute mode
-const toggleMinuteMode = (e: MouseEvent) => {
+const toggleMode = (e: MouseEvent) => {
 	if (e.button === 2) {
 		MinuteMode.value = !MinuteMode.value
 		localStorage.setItem("minute-mode", MinuteMode.value ? "minute" : "second")
+	} else if (e.button === 0) {
+		WeekDayMode.value = !WeekDayMode.value
+		localStorage.setItem(
+			"week-day-mode",
+			WeekDayMode.value ? "week-day" : "none"
+		)
 	}
 }
 </script>
 
 <template>
-	<div id="time" @mousedown="toggleMinuteMode" :class="minuteModeClass">
+	<div
+		id="time"
+		@mousedown="toggleMode"
+		:class="[minuteModeClass, weekdayModeClass]"
+	>
 		<span class="normal-line">
 			<span class="time-line">
 				<span class="hour">{{ addZero(time?.hours) }}</span>
@@ -63,10 +77,10 @@ const toggleMinuteMode = (e: MouseEvent) => {
 
 <style lang="postcss" scoped>
 #time {
-	@apply inline-flex items-center justify-center py-1 m-1 px-4 rounded
+	@apply inline-flex items-center justify-center w-[97px] py-1 m-1 px-4 rounded
 	text-sm font-normal font-mono text-gray-400
 	hover:bg-slate-200 dark:hover:bg-gray-600 hover:cursor-pointer
-	transition-colors duration-300 select-none;
+	transition-all duration-300 select-none;
 }
 
 .normal-line {
@@ -74,8 +88,15 @@ const toggleMinuteMode = (e: MouseEvent) => {
 }
 
 .week-line {
-	@apply inline-flex items-center justify-center pl-4
-	text-xs font-thin text-gray-400;
+	@apply inline-flex items-center justify-center w-0 overflow-hidden
+	text-xs font-thin text-gray-400 transition-all duration-200;
+}
+
+#time.weekday-mode {
+	@apply w-[142px];
+}
+#time.weekday-mode .week-line {
+	@apply w-12 pl-4;
 }
 
 .time-line > .spearate {

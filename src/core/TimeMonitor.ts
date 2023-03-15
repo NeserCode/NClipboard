@@ -33,7 +33,9 @@ export class TimeMonitor {
 			month: date.getMonth() + 1,
 			day: date.getDate(),
 			week: date.getDay(),
-			weekString: ["日", "一", "二", "三", "四", "五", "六"][date.getDay()],
+			weekString: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
+				date.getDay()
+			],
 		}
 	}
 
@@ -50,7 +52,9 @@ export class TimeMonitor {
 			month: date.getMonth() + 1,
 			day: date.getDate(),
 			week: date.getDay(),
-			weekString: ["日", "一", "二", "三", "四", "五", "六"][date.getDay()],
+			weekString: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
+				date.getDay()
+			],
 		}
 	}
 
