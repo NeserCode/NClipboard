@@ -8,6 +8,8 @@ interface TimeInterface {
 	year: number
 	month: number
 	day: number
+	week: number
+	weekString: string
 }
 
 export class TimeMonitor {
@@ -30,6 +32,8 @@ export class TimeMonitor {
 			year: date.getFullYear(),
 			month: date.getMonth() + 1,
 			day: date.getDate(),
+			week: date.getDay(),
+			weekString: ["日", "一", "二", "三", "四", "五", "六"][date.getDay()],
 		}
 	}
 
@@ -45,6 +49,8 @@ export class TimeMonitor {
 			year: date.getFullYear(),
 			month: date.getMonth() + 1,
 			day: date.getDate(),
+			week: date.getDay(),
+			weekString: ["日", "一", "二", "三", "四", "五", "六"][date.getDay()],
 		}
 	}
 

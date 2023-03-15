@@ -41,27 +41,41 @@ const toggleMinuteMode = (e: MouseEvent) => {
 
 <template>
 	<div id="time" @mousedown="toggleMinuteMode" :class="minuteModeClass">
-		<span class="time-line">
-			<span class="hour">{{ addZero(time?.hours) }}</span>
-			<span class="spearate">:</span>
-			<span class="minute">{{ addZero(time?.minutes) }}</span>
-			<span class="spearate" v-if="!MinuteMode">:</span>
-			<span class="second" v-if="!MinuteMode">{{
-				addZero(time?.seconds)
-			}}</span>
+		<span class="normal-line">
+			<span class="time-line">
+				<span class="hour">{{ addZero(time?.hours) }}</span>
+				<span class="spearate">:</span>
+				<span class="minute">{{ addZero(time?.minutes) }}</span>
+				<span class="spearate" v-if="!MinuteMode">:</span>
+				<span class="second" v-if="!MinuteMode">{{
+					addZero(time?.seconds)
+				}}</span>
+			</span>
+			<span class="time-line">
+				{{ `${time?.year}/${addZero(time?.month)}/${addZero(time?.day)}` }}
+			</span>
 		</span>
-		<span class="time-line">
-			{{ `${time?.year}/${addZero(time?.month)}/${addZero(time?.day)}` }}
+		<span class="week-line">
+			{{ time?.weekString }}
 		</span>
 	</div>
 </template>
 
 <style lang="postcss" scoped>
 #time {
-	@apply inline-flex flex-col items-center justify-center py-1 m-1 px-4 rounded
+	@apply inline-flex items-center justify-center py-1 m-1 px-4 rounded
 	text-sm font-normal font-mono text-gray-400
 	hover:bg-slate-200 dark:hover:bg-gray-600 hover:cursor-pointer
 	transition-colors duration-300 select-none;
+}
+
+.normal-line {
+	@apply inline-flex flex-col items-center justify-center;
+}
+
+.week-line {
+	@apply inline-flex items-center justify-center pl-4
+	text-xs font-thin text-gray-400;
 }
 
 .time-line > .spearate {

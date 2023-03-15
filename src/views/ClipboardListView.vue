@@ -191,7 +191,7 @@ function handleMouseMove(e: MouseEvent) {
 </script>
 
 <template>
-	<div class="copy-list">
+	<div class="copy-list" v-if="clipboardData">
 		<template v-for="(item, index) of clipboardData" :key="item.time">
 			<div class="copy-item">
 				<span class="copy-text" v-if="!isImage(item.clipboard)">{{
