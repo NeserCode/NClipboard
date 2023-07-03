@@ -55,7 +55,9 @@ windowController.value?.listeningToggleDarkmode(() => {
 				<component :is="Component" />
 			</custom-transition>
 		</router-view>
-		<div :class="['mover', enabledMoverClass]" v-if="shouldShowMover">Drag</div>
+		<div :class="['mover', enabledMoverClass]" v-if="shouldShowMover">
+			Drag
+		</div>
 	</div>
 </template>
 
@@ -68,14 +70,14 @@ windowController.value?.listeningToggleDarkmode(() => {
 }
 
 .mover {
-	@apply inline-flex justify-center items-center w-0 h-[60px]
+	@apply absolute flex top-0 right-0 justify-center items-center w-0 h-[60px]
 	bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-green-300
 	font-thin text-sm
 	transition-all overflow-hidden;
 	-webkit-app-region: drag;
 }
 .mover.enabled {
-	@apply w-14;
+	@apply w-[100vw];
 }
 </style>
 

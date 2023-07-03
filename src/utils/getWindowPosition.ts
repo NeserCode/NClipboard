@@ -16,6 +16,10 @@ export function getWindowPosition(): Position {
 
 // get the screen size
 export function getScreenUsable() {
-	const { width, height } = remote.screen.getPrimaryDisplay().workAreaSize
-	return { width, height }
+	const display = remote.screen.getPrimaryDisplay()
+	const { width, height } = display.workAreaSize
+	const { x, y } = display.workArea
+	console.log(display)
+
+	return { x, y, width, height }
 }

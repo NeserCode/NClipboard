@@ -18,11 +18,12 @@ const disabledClass = computed(() => (isOpening.value ? "disabled" : null))
 
 function toggleWindowCreator() {
 	if (!isOpening.value) {
+		const useable = getScreenUsable()
 		listWindow.value = new WindowCreatorClass(
 			{
-				x: 0,
-				y: 0,
-				height: getScreenUsable().height,
+				x: useable.x,
+				y: useable.y,
+				height: useable.height,
 				width: 800,
 				// skipTaskbar: true,
 				// parent: remote.getCurrentWindow(),

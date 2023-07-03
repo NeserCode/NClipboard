@@ -93,101 +93,6 @@ function copyClipboard(index: number) {
 		clipManager.value.copyToClipboard(clipboard, isImage(clipboard))
 	}
 }
-
-// Magnifier
-const magnifier = ref<HTMLElement>()
-const magnifierImage = ref<HTMLCanvasElement>()
-const magnifierMover = ref<HTMLElement>()
-
-function showMagnifier() {
-	magnifier.value?.classList.add("show")
-	magnifierMover.value?.classList.add("show")
-}
-
-function hideMagnifier() {
-	magnifier.value?.classList.remove("show")
-	magnifierMover.value?.classList.remove("show")
-}
-
-function updateMagnifierPosition(e: MouseEvent) {
-	let target = e.target as HTMLImageElement
-
-	let x = e.offsetX
-	let y = e.offsetY
-
-	const sizeFactor = 2
-	const magnifierWidth = 300
-	const magnifierHeight = 300
-
-	// get target's position
-	let targetRect = target.getBoundingClientRect()
-	// get target image's oriange size
-	let targetNaturalWidth = target.naturalWidth
-	let targetNaturalHeight = target.naturalHeight
-	let targetImageRatio = targetNaturalWidth / targetNaturalHeight
-
-	if (magnifierImage.value) {
-		let pictrue = magnifierImage.value.getContext("2d")
-		if (pictrue) {
-			pictrue.clearRect(0, 0, magnifierWidth, magnifierHeight)
-			pictrue.drawImage(
-				target,
-				x - magnifierWidth / 2 / sizeFactor > 0
-					? x + magnifierWidth / 2 / sizeFactor < targetNaturalWidth
-						? x - magnifierWidth / 2 / sizeFactor
-						: targetNaturalWidth - magnifierWidth / sizeFactor
-					: 0,
-				y - magnifierHeight / 2 / sizeFactor > 0
-					? y + magnifierHeight / 2 / sizeFactor < targetNaturalHeight
-						? y - magnifierHeight / 2 / sizeFactor
-						: targetNaturalHeight - magnifierHeight / sizeFactor
-					: 0,
-				magnifierWidth,
-				magnifierHeight,
-				0,
-				0,
-				magnifierWidth * sizeFactor,
-				(magnifierHeight * sizeFactor) / targetImageRatio
-			)
-
-			if (magnifier.value) {
-				magnifier.value.style.left = `${targetRect.left}px`
-				magnifier.value.style.top = `${
-					target.offsetTop + target.offsetHeight + 10
-				}px`
-			}
-		}
-
-		if (magnifierMover.value) {
-			magnifierMover.value.style.left = `${
-				x - 75 + target.offsetLeft > targetRect.left
-					? x + 75 + target.offsetLeft < targetRect.left + targetRect.width
-						? x - 75 + target.offsetLeft
-						: targetRect.left + targetRect.width - 150
-					: targetRect.left
-			}px`
-			magnifierMover.value.style.top = `${
-				y - 75 > 0
-					? y + 75 < target.offsetHeight
-						? y - 75 + target.offsetTop
-						: target.offsetHeight + target.offsetTop - 150
-					: target.offsetTop
-			}px`
-		}
-	}
-}
-
-function handleImageHovering() {
-	showMagnifier()
-}
-
-function handleImageLeave() {
-	hideMagnifier()
-}
-
-function handleMouseMove(e: MouseEvent) {
-	updateMagnifierPosition(e)
-}
 </script>
 
 <template>
@@ -198,35 +103,32 @@ function handleMouseMove(e: MouseEvent) {
 					item.clipboard
 				}}</span>
 				<span class="copy-image" v-else>
-					<img
-						@mouseenter="handleImageHovering()"
-						@mouseleave="handleImageLeave"
-						@mousemove="handleMouseMove"
-						:src="item.clipboard"
-						alt="image from clipboard"
-					/>
+					<img :src="item.clipboard" alt="image from clipboard" />
 				</span>
 				<span class="details">
 					<span class="translated-time">
 						{{ translateTime(item.time) }}
 					</span>
 					<span class="type">
-						{{ isImage(item.clipboard) ? "IMAGE/PNG" : "TEXT/PLAIN" }}
+						{{
+							isImage(item.clipboard) ? "IMAGE/PNG" : "TEXT/PLAIN"
+						}}
 						{{ getTranslatedSize(item.clipboard) }}
 					</span>
 				</span>
 				<span class="opearations">
-					<button class="op-btn" @click="copyClipboard(index)">复制</button>
-					<button class="op-btn danger" @click="deleteClipboard(index)">
+					<button class="op-btn" @click="copyClipboard(index)">
+						复制
+					</button>
+					<button
+						class="op-btn danger"
+						@click="deleteClipboard(index)"
+					>
 						删除
 					</button>
 				</span>
 			</div>
 		</template>
-		<div class="magnifier" ref="magnifier">
-			<canvas class="magnifier-image" ref="magnifierImage" alt="magnifier" />
-		</div>
-		<span class="magnifier-mover" ref="magnifierMover"></span>
 	</div>
 </template>
 
@@ -250,7 +152,6 @@ function handleMouseMove(e: MouseEvent) {
 }
 
 .copy-image img {
-	@apply cursor-move;
 	-webkit-user-drag: none;
 }
 
@@ -282,28 +183,5 @@ function handleMouseMove(e: MouseEvent) {
 
 .danger {
 	@apply bg-red-500 dark:bg-red-400 text-gray-50 dark:text-gray-700;
-}
-
-/* Magnifier style */
-.magnifier {
-	@apply absolute w-[300px] h-[300px] hidden overflow-hidden
-	bg-white dark:bg-gray-800 border-2 border-red-400;
-}
-.magnifier.show {
-	@apply block;
-}
-
-.magnifier canvas {
-	@apply inline-block w-full h-full;
-}
-
-.magnifier-mover {
-	@apply absolute w-[150px] h-[150px] hidden border-2
-	border-red-400
-	bg-white dark:bg-black bg-opacity-60 dark:bg-opacity-30 backdrop-blur
-	select-none pointer-events-none;
-}
-.magnifier-mover.show {
-	@apply block;
 }
 </style>

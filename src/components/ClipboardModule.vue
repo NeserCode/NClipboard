@@ -13,10 +13,19 @@ const maxLength = ref<number>(1e3)
 const storeLength = ref<number>(0)
 const storeManager = new StoreManager({ maxLength: maxLength.value })
 const clipboardMonitor = new ClipboardMonitor(storeManager)
+const contentWidth = ref(0)
+const shouldShowContent = ref(true)
 
 onMounted(() => {
 	clipboardMonitor.start()
 	storeLength.value = storeManager.getStore().length
+
+	// for animate content width
+	setTimeout(() => {
+		contentWidth.value = getInitialWidth()
+		toggleClipboard(new MouseEvent("mousedown", { button: 2 }))
+		toggleClipboard(new MouseEvent("mousedown", { button: 2 }))
+	}, 2000)
 })
 
 // @ts-expect-error Eimtter has writen function's (handler) type
@@ -33,14 +42,43 @@ $Bus.on("clipboard-updated-from-last", (data: string) => {
 	prefix.value = "Lastest"
 	storeLength.value = storeManager.getStore().length
 })
+
+function getInitialWidth() {
+	const target = document.querySelector("#clipboard .main") as HTMLElement
+	if (target) {
+		const rect = target.getBoundingClientRect()
+
+		return rect.width
+	} else return 0
+}
+
+function initWidthforContent() {
+	const target = document.querySelector("#clipboard .main") as HTMLElement
+	if (target) {
+		target.style.width = `${
+			shouldShowContent.value ? contentWidth.value : 0
+		}px`
+	}
+}
+
+function toggleClipboard(e: MouseEvent) {
+	if (contentWidth.value === 0) {
+		contentWidth.value = getInitialWidth()
+	}
+
+	if (e.button === 2) {
+		shouldShowContent.value = !shouldShowContent.value
+		initWidthforContent()
+	} else return false
+}
 </script>
 
 <template>
-	<div id="clipboard">
+	<div id="clipboard" @mousedown="toggleClipboard">
 		<span class="prefix">
 			{{ prefix }}
 		</span>
-		<span class="main">
+		<span :class="['main', shouldShowContent ? null : 'hide']">
 			{{ clipboard }}
 		</span>
 		<span class="limit"> {{ storeLength }}/{{ maxLength }} </span>
@@ -68,7 +106,11 @@ $Bus.on("clipboard-updated-from-last", (data: string) => {
 #clipboard .main {
 	@apply text-sm text-gray-400
   truncate
-  transition-colors duration-300;
+  transition-all duration-300;
+}
+
+#clipboard .main.hide {
+	@apply w-0;
 }
 
 #clipboard .limit {

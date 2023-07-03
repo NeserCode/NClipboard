@@ -29,8 +29,14 @@ $Bus.on("power-update", () => {
 		<span :class="['power-line', isChargingClass]">
 			<span class="power-status">
 				<Battery0Icon class="power-icon" v-if="percentage <= 15" />
-				<Battery50Icon class="power-icon" v-else-if="percentage <= 85" />
-				<Battery100Icon class="power-icon" v-else-if="percentage <= 100" />
+				<Battery50Icon
+					class="power-icon"
+					v-else-if="percentage <= 85"
+				/>
+				<Battery100Icon
+					class="power-icon"
+					v-else-if="percentage <= 100"
+				/>
 			</span>
 			<span class="power-percentage">{{ percentage }}%</span>
 			<span class="power-charging">
@@ -59,7 +65,7 @@ $Bus.on("power-update", () => {
 
 .power-charging .power-icon {
 	@apply h-3 w-0 overflow-hidden
-	transition-all duration-200;
+	transition-all duration-200 animate-pulse;
 }
 
 .power-line.charging .power-charging .power-icon {

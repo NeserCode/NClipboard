@@ -38,7 +38,10 @@ const addZero = (num: number | undefined) => {
 const toggleMode = (e: MouseEvent) => {
 	if (e.button === 2) {
 		MinuteMode.value = !MinuteMode.value
-		localStorage.setItem("minute-mode", MinuteMode.value ? "minute" : "second")
+		localStorage.setItem(
+			"minute-mode",
+			MinuteMode.value ? "minute" : "second"
+		)
 	} else if (e.button === 0) {
 		WeekDayMode.value = !WeekDayMode.value
 		localStorage.setItem(
@@ -66,7 +69,11 @@ const toggleMode = (e: MouseEvent) => {
 				}}</span>
 			</span>
 			<span class="time-line">
-				{{ `${time?.year}/${addZero(time?.month)}/${addZero(time?.day)}` }}
+				{{
+					`${time?.year}/${addZero(time?.month)}/${addZero(
+						time?.day
+					)}`
+				}}
 			</span>
 		</span>
 		<span class="week-line">
@@ -93,10 +100,10 @@ const toggleMode = (e: MouseEvent) => {
 }
 
 #time.weekday-mode {
-	@apply w-[142px];
+	@apply w-[150px];
 }
 #time.weekday-mode .week-line {
-	@apply w-12 pl-4;
+	@apply w-fit pl-4;
 }
 
 .time-line > .spearate {
