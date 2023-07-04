@@ -2,7 +2,7 @@ import { clipboard, $Bus } from "@/utils"
 import { StoreManager } from "@/core/StoreManager"
 
 import type { OnceClipboard } from "@/share"
-import { remote, NativeImage } from "electron"
+import { NativeImage } from "electron"
 
 export class ClipboardMonitor {
 	private CLIPBOARD = clipboard
@@ -25,7 +25,8 @@ export class ClipboardMonitor {
 		if (containsString.includes("text")) rtv = this.CLIPBOARD.readText()
 		else if (containsString.includes("image"))
 			rtv = this.CLIPBOARD.readImage().toDataURL()
-		else if (containsString.includes("html")) rtv = this.CLIPBOARD.readHTML()
+		else if (containsString.includes("html"))
+			rtv = this.CLIPBOARD.readHTML()
 		else if (containsString.includes("rtf")) rtv = this.CLIPBOARD.readRTF()
 		else if (containsString.includes("bookmark"))
 			rtv = JSON.stringify(this.CLIPBOARD.readBookmark())
@@ -40,17 +41,17 @@ export class ClipboardMonitor {
 	private pushToStore() {
 		const clipboard = this.getClipboard()
 		if (clipboard.readContent) {
-			this.STORE_MANAGER?.getStore()
 			this.STORE_MANAGER?.pushToStore(clipboard.readContent)
+			this.STORE_MANAGER?.getStore()
 		}
 	}
 
 	public copyToClipboard(clipboard: OnceClipboard, isImage = false) {
-		const newNativeImage: NativeImage =
-			remote.nativeImage.createFromDataURL(clipboard)
 		if (isImage) {
-			this.CLIPBOARD.writeImage(newNativeImage)
+			const img = NativeImage.createFromDataURL(clipboard)
+			this.CLIPBOARD.writeImage(img)
 		} else this.CLIPBOARD.writeText(clipboard)
+		this.pushToStore()
 	}
 
 	public start() {

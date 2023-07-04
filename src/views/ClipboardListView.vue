@@ -2,6 +2,7 @@
 import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
 import { StoreManager } from "@/core/StoreManager"
 import { ref, onBeforeMount } from "vue"
+import { getMainWindowBounds } from "@/utils"
 // import { debounce } from "ts-debounce"
 
 import { StoredClipboard } from "@/share"
@@ -93,12 +94,38 @@ function copyClipboard(index: number) {
 		clipManager.value.copyToClipboard(clipboard, isImage(clipboard))
 	}
 }
+
+function horizontalScroll(e: WheelEvent) {
+	if (e.deltaX) return
+	e.preventDefault()
+	const container = document.querySelector(".copy-list") as HTMLElement
+	if (container && e.deltaY) {
+		const bounds = getMainWindowBounds()
+		const scrollLeft = container.scrollLeft
+		container.scrollTo({
+			left: (bounds.width * Math.abs(e.deltaY)) / e.deltaY + scrollLeft,
+			top: 0,
+			behavior: "smooth",
+		})
+	}
+}
+
+function handleClipboardUpdate(index: number, e: MouseEvent) {
+	if (e.button === 2) {
+		deleteClipboard(index)
+	} else {
+		copyClipboard(index)
+	}
+}
 </script>
 
 <template>
-	<div class="copy-list" v-if="clipboardData">
+	<div class="copy-list" v-if="clipboardData" @wheel="horizontalScroll">
 		<template v-for="(item, index) of clipboardData" :key="item.time">
-			<div class="copy-item">
+			<div
+				class="copy-item"
+				@click="handleClipboardUpdate(index, $event)"
+			>
 				<span class="copy-text" v-if="!isImage(item.clipboard)">{{
 					item.clipboard
 				}}</span>
@@ -116,8 +143,8 @@ function copyClipboard(index: number) {
 						{{ getTranslatedSize(item.clipboard) }}
 					</span>
 				</span>
-				<span class="opearations">
-					<button class="op-btn" @click="copyClipboard(index)">
+				<!-- <span class="opearations">
+					<button class="op-btn" >
 						复制
 					</button>
 					<button
@@ -126,7 +153,7 @@ function copyClipboard(index: number) {
 					>
 						删除
 					</button>
-				</span>
+				</span> -->
 			</div>
 		</template>
 	</div>
@@ -134,21 +161,24 @@ function copyClipboard(index: number) {
 
 <style lang="postcss" scoped>
 .copy-list {
-	@apply relative inline-flex flex-col items-center w-full max-w-full overflow-x-hidden
+	@apply relative inline-flex items-center w-full max-w-full h-[120px]
   bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600
-	text-gray-700 dark:text-gray-300 overflow-y-auto
-	transition-all duration-300;
+	text-gray-700 dark:text-gray-300 overflow-x-auto
+	transition-all duration-300
+	snap-x snap-mandatory;
 }
 
 .copy-item {
-	@apply inline-flex flex-col justify-center w-full max-w-full p-4 box-border border rounded-none
+	@apply inline-flex flex-col justify-center w-full max-w-xs h-[120px] p-4 box-border border rounded-none
 	bg-gray-100 dark:bg-gray-700 border-slate-200 dark:border-gray-600
 	whitespace-pre font-mono
-	transition-colors duration-300;
+	transition-colors duration-300
+	snap-start;
 }
 
+.copy-text,
 .copy-image {
-	@apply border-2 border-gray-400 dark:border-gray-600 w-fit;
+	@apply inline-block w-full max-w-full h-[80px] truncate;
 }
 
 .copy-image img {
@@ -156,7 +186,7 @@ function copyClipboard(index: number) {
 }
 
 .copy-item .details {
-	@apply inline-flex items-center w-full max-w-full mt-2
+	@apply inline-flex items-center w-full max-w-full flex-wrap
 	text-gray-400
 	transition-colors duration-300;
 }
@@ -166,22 +196,5 @@ function copyClipboard(index: number) {
 .details .type {
 	@apply inline-flex items-center text-xs ml-2 px-1 rounded-sm
 	bg-gray-200 dark:bg-gray-600;
-}
-
-.opearations {
-	@apply inline-flex items-center w-full max-w-full mt-2
-	text-gray-400
-	transition-colors duration-300;
-}
-
-.op-btn {
-	@apply inline-flex items-center text-xs px-2 py-1 mr-1 rounded border border-transparent
-	bg-gray-200 dark:bg-gray-600 active:border-gray-600 active:dark:border-gray-400
-	active:bg-gray-600 dark:active:bg-gray-200 active:text-gray-200 active:dark:text-gray-600
-	transition-colors duration-150 cursor-pointer;
-}
-
-.danger {
-	@apply bg-red-500 dark:bg-red-400 text-gray-50 dark:text-gray-700;
 }
 </style>

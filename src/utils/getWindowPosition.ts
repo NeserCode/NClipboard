@@ -6,6 +6,18 @@ interface Position {
 	y: number
 }
 
+interface bounds extends Position {
+	width: number
+	height: number
+}
+
+export function getMainWindowBounds(): bounds {
+	const remoteWindow = remote.getCurrentWindow()
+	const position = remoteWindow.getPosition()
+	const size = remoteWindow.getSize()
+	return { x: position[0], y: position[1], width: size[0], height: size[1] }
+}
+
 export function getWindowPosition(): Position {
 	const position = localStorage.getItem("win-position")
 	if (position) {
@@ -17,9 +29,6 @@ export function getWindowPosition(): Position {
 // get the screen size
 export function getScreenUsable() {
 	const display = remote.screen.getPrimaryDisplay()
-	const { width, height } = display.workAreaSize
-	const { x, y } = display.workArea
-	console.log(display)
 
-	return { x, y, width, height }
+	return { ...display.workArea }
 }

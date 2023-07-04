@@ -15,6 +15,7 @@ const storeManager = new StoreManager({ maxLength: maxLength.value })
 const clipboardMonitor = new ClipboardMonitor(storeManager)
 const contentWidth = ref(0)
 const shouldShowContent = ref(true)
+const isReady = ref(false)
 
 onMounted(() => {
 	clipboardMonitor.start()
@@ -24,7 +25,10 @@ onMounted(() => {
 	setTimeout(() => {
 		contentWidth.value = getInitialWidth()
 		toggleClipboard(new MouseEvent("mousedown", { button: 2 }))
-		toggleClipboard(new MouseEvent("mousedown", { button: 2 }))
+		setTimeout(() => {
+			toggleClipboard(new MouseEvent("mousedown", { button: 2 }))
+			isReady.value = true
+		}, 0)
 	}, 2000)
 })
 
@@ -62,6 +66,7 @@ function initWidthforContent() {
 }
 
 function toggleClipboard(e: MouseEvent) {
+	if (!isReady.value) return false
 	if (contentWidth.value === 0) {
 		contentWidth.value = getInitialWidth()
 	}

@@ -4,7 +4,7 @@ import PowerModule from "@/components/PowerModule.vue"
 import ClipboardModule from "@/components/ClipboardModule.vue"
 import { WindowCreator as WindowCreatorClass } from "@/core/windowCreator"
 import { ConfigRemoteMonitor } from "@/core/ConfigRemoteMonitor"
-import { getScreenUsable } from "@/utils/getWindowPosition"
+import { getMainWindowBounds } from "@/utils/getWindowPosition"
 import { ref, computed } from "vue"
 
 import { ipcRenderer } from "electron"
@@ -18,13 +18,13 @@ const disabledClass = computed(() => (isOpening.value ? "disabled" : null))
 
 function toggleWindowCreator() {
 	if (!isOpening.value) {
-		const useable = getScreenUsable()
+		const bounds = getMainWindowBounds()
 		listWindow.value = new WindowCreatorClass(
 			{
-				x: useable.x,
-				y: useable.y,
-				height: useable.height,
-				width: 800,
+				x: bounds.x,
+				y: bounds.y + bounds.height + 5,
+				height: 120 + 2,
+				width: bounds.width,
 				// skipTaskbar: true,
 				// parent: remote.getCurrentWindow(),
 				// modal: true,

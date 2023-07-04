@@ -14,7 +14,8 @@ export class StoreManager {
 	private STORE_MAX_LENGTH = 10
 
 	constructor(options?: { maxLength?: number }) {
-		if (options && options.maxLength) this.STORE_MAX_LENGTH = options.maxLength
+		if (options && options.maxLength)
+			this.STORE_MAX_LENGTH = options.maxLength
 		this.initialStore()
 	}
 
@@ -35,13 +36,22 @@ export class StoreManager {
 			this.STORE.length === 0
 		) {
 			const store = this.STORE
+
+			// has same clipboard in store, store the new one, delete the old one
+			for (let i = 0; i < store.length; i++) {
+				if (store[i].clipboard == clipboard) {
+					this.deleteClipboard(i)
+					break
+				}
+			}
+
 			store.push({
 				time: Date.now(),
 				clipboard,
 			})
 			if (store.length > this.STORE_MAX_LENGTH) store.shift()
 			this.saveStore(store)
-			console.log("StoreManager:pushed to store", store)
+			console.log("StoreManager: pushed to store", store)
 		}
 	}
 

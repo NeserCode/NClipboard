@@ -63,14 +63,14 @@ windowController.value?.listeningToggleDarkmode(() => {
 
 <style lang="postcss" scoped>
 .application {
-	@apply inline-flex items-center w-full h-full overflow-y-hidden;
+	@apply inline-flex items-center rounded w-full h-full overflow-y-hidden;
 }
 .views {
-	@apply inline-flex items-center w-full h-full;
+	@apply inline-flex items-center w-full h-full overflow-y-hidden;
 }
 
 .mover {
-	@apply absolute flex top-0 right-0 justify-center items-center w-0 h-[60px]
+	@apply absolute flex top-0 right-0 justify-center rounded items-center w-0 h-[60px]
 	bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-green-300
 	font-thin text-sm
 	transition-all overflow-hidden;
@@ -82,6 +82,10 @@ windowController.value?.listeningToggleDarkmode(() => {
 </style>
 
 <style>
+html {
+	overflow: hidden;
+	scroll-behavior: smooth;
+}
 html.dark {
 	color-scheme: dark;
 }

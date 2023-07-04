@@ -24,9 +24,8 @@ export class WindowCreator {
 		opt: BrowserWindowConstructorOptions,
 		url: string
 	): Promise<void> {
-		this.mainWindow = new BrowserWindow(
-			assignOptions(defaultWindowOptions, opt)
-		)
+		const options = assignOptions(defaultWindowOptions, opt)
+		this.mainWindow = new BrowserWindow(options)
 		if (isDevelopment)
 			await this.mainWindow.loadURL(
 				url ? `http://localhost:8080${url}` : `http://localhost:8080`
@@ -36,11 +35,7 @@ export class WindowCreator {
 				url ? `app://./index.html${url}` : `app://./index.html`
 			)
 		// this.mainWindow.webContents.openDevTools()
-		console.log(
-			"Creator created a window",
-			assignOptions(defaultWindowOptions, opt),
-			opt
-		)
+		console.log("Creator created a window", options, opt)
 
 		this.mainWindow.on("closed", () => {
 			this.mainWindow = null
